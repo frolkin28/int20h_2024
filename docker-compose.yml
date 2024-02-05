@@ -15,8 +15,30 @@ services:
       - ./pyproject.toml:/app/pyproject.toml
       - ./pdm.lock:/app/pdm.lock
 
+  postgres-base: &database-base
+    image: postgres:16.0
+    environment:
+      POSTGRES_DB: int20h
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data
+      TZ: "Europe/Kiev"
+
   backend:
     <<: *base-dev
     restart: unless-stopped
     ports:
       - "8080:8080"
+    depends_on:
+      - postgres
+
+  postgres:
+    <<: *database-base
+    command: -p 5432
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:
