@@ -2,7 +2,6 @@
 .gitignore
 docker-compose.yml
 .docker
-tests/__pycache__
 pycache/
 */pycache/
 */*/pycache/
@@ -11,7 +10,6 @@ pycache/
 .Python
 env/
 develop-eggs/
-downloads/
 eggs/
 parts/
 sdist/
@@ -29,8 +27,5 @@ venv/
 .idea
 LICENSE
 README.md
-.lets
-.mypy_cache
-.ruff_cache
 .pdm.toml
 __pypackages__

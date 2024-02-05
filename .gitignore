@@ -4,10 +4,7 @@ out
 gen
 venv
 __pycache__
-.lets
 .pdm-python
-.mypy_cache
-.ruff_cache
 .venv
 .pdm.toml
 __pypackages__
