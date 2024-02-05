@@ -1,0 +1,16 @@
+[project]
+name = "int20h_2024"
+version = "0.1.0"
+description = "INT20H test task"
+authors = [
+    {name = "frolkin28", email = "frolkin2801@gmail.com"},
+    {name = "frolkin28", email = "frolkin2801@gmail.com"},
+]
+dependencies = [
+    "flask>=3.0.2",
+]
+requires-python = ">=3.12"
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"

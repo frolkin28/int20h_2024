@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  base-dev: &base-dev
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: dev
+    tty: true
+    init: true
+    stdin_open: true
+    volumes:
+      - ./backend:/app/backend
+      - ./config:/app/config
+      - ./pyproject.toml:/app/pyproject.toml
+      - ./pdm.lock:/app/pdm.lock
+
+  backend:
+    <<: *base-dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
