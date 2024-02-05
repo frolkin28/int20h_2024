@@ -8,6 +8,11 @@ authors = [
 ]
 dependencies = [
     "flask>=3.0.2",
+    "pyuwsgi>=2.0.23.post0",
+    "Flask-SQLAlchemy>=3.1.1",
+    "psycopg2-binary>=2.9.9",
+    "Flask-Migrate>=4.0.5",
+    "pyyaml>=6.0.1",
 ]
 requires-python = ">=3.12"
 
