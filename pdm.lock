@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform"]
 lock_version = "4.4"
-content_hash = "sha256:6b926fee443698c9b35de4e7f935e61efc0798d137d2cbea155dbd3bfd551587"
+content_hash = "sha256:0ed27d33797279936ddf42b369e20460c06ca08afb9396aebc0e44093ccdeaef"
 
 [[package]]
 name = "alembic"
@@ -193,21 +193,6 @@ files = [
     {file = "psycopg2_binary-2.9.9-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:57fede879f08d23c85140a360c6a77709113efd1c993923c59fde17aa27599fe"},
     {file = "psycopg2_binary-2.9.9-cp312-cp312-win32.whl", hash = "sha256:64cf30263844fa208851ebb13b0732ce674d8ec6a0c86a4e160495d299ba3c93"},
     {file = "psycopg2_binary-2.9.9-cp312-cp312-win_amd64.whl", hash = "sha256:81ff62668af011f9a48787564ab7eded4e9fb17a4a6a74af5ffa6a457400d2ab"},
-]
-
-[[package]]
-name = "pyuwsgi"
-version = "2.0.23.post0"
-summary = "The uWSGI server"
-files = [
-    {file = "pyuwsgi-2.0.23.post0-cp312-cp312-macosx_10_9_x86_64.whl", hash = "sha256:f7455976abfa1dd43b5f3376f7f04a925c16babba1c3fc6edcdd81f5c0f24383"},
-    {file = "pyuwsgi-2.0.23.post0-cp312-cp312-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:508f5d84cd677cecc640d0e321badc61080c40c61843cd130b32f356729a599f"},
-    {file = "pyuwsgi-2.0.23.post0-cp312-cp312-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:dcf93afec49f5cf29b0a68f4d2fb3e44a3ad1f205704ab2f41f9db47dacb8e13"},
-    {file = "pyuwsgi-2.0.23.post0-cp312-cp312-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a19ab0d5c43bc179a70cb079feb7804e39be6326bf98ec38808fcea5e7d44bd0"},
-    {file = "pyuwsgi-2.0.23.post0-cp312-cp312-musllinux_1_1_aarch64.whl", hash = "sha256:8c5283e38c4fd3130cd7384d57535d60435c63b81a41a6463f26f340efeda9de"},
-    {file = "pyuwsgi-2.0.23.post0-cp312-cp312-musllinux_1_1_i686.whl", hash = "sha256:0d9dfb79bffa552e5985385bc114ecec1d4079b95ce24796f577ef0df727da06"},
-    {file = "pyuwsgi-2.0.23.post0-cp312-cp312-musllinux_1_1_x86_64.whl", hash = "sha256:b531ac80155b6c839215d05f95569b34e614e97aab055072c74112b1d2a45546"},
-    {file = "pyuwsgi-2.0.23.post0.tar.gz", hash = "sha256:04ec79c4a3acad21002ebf1479050c3208605d27cc6659008df51092951eeb8e"},
 ]
 
 [[package]]
