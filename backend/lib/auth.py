@@ -5,19 +5,17 @@ from flask_jwt_extended import (
     set_access_cookies,
     set_refresh_cookies,
 )
+from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 
+from backend.exc import (
+    UserAlreadyExist,
+    UserDoesNotExist,
+    AuthenticationError,
+)
 from backend.models import User
 from backend.types import SignInPayload
 from backend.services.db import db
-
-
-class AuthenticationError(Exception):
-    pass
-
-
-class UserDoesNotExist(Exception):
-    pass
 
 
 def create_user(payload: SignInPayload) -> int:
@@ -28,7 +26,10 @@ def create_user(payload: SignInPayload) -> int:
         password=generate_password_hash(payload["password"]),
     )
     db.session.add(user)
-    db.session.commit()
+    try:
+        db.session.commit()
+    except IntegrityError as e:
+        raise UserAlreadyExist from e
 
     return user.id
 

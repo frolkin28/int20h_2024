@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["cross_platform"]
 lock_version = "4.4"
-content_hash = "sha256:4513e9f7951fc55cc3c70ca6952a1b3b9889fec1d96a3caf4fda77aa16d043b4"
+content_hash = "sha256:826bd184aa7557c3503c23ff241af7399cbe0c55518808724283a994727a9430"
 
 [[package]]
 name = "alembic"
@@ -29,6 +29,34 @@ requires_python = ">=3.8"
 summary = "A pluggable API specification generator. Currently supports the OpenAPI Specification (f.k.a. the Swagger specification)."
 dependencies = [
     "packaging>=21.3",
+]
+files = [
+    {file = "apispec-6.4.0-py3-none-any.whl", hash = "sha256:00ac876f1968d8e1624400c8571d2a2887edd3d6aa9d1a130efaafbdb49e85d7"},
+    {file = "apispec-6.4.0.tar.gz", hash = "sha256:42b8a6833cf154c9dbd22d006b56bf9c49c972d32d24fe716fd734e0f6b739b8"},
+]
+
+[[package]]
+name = "apispec-webframeworks"
+version = "1.0.0"
+requires_python = ">=3.8"
+summary = "Web framework plugins for apispec."
+dependencies = [
+    "apispec[yaml]>=6.0.0",
+]
+files = [
+    {file = "apispec_webframeworks-1.0.0-py3-none-any.whl", hash = "sha256:7ca64ee5cdac25f6eb686744d179a4946db9185388d1986c9468e4f52762febb"},
+    {file = "apispec_webframeworks-1.0.0.tar.gz", hash = "sha256:024965e69d40b8245165070668c9df6e65cd010ed333a5fb648472ff656bf019"},
+]
+
+[[package]]
+name = "apispec"
+version = "6.4.0"
+extras = ["yaml"]
+requires_python = ">=3.8"
+summary = "A pluggable API specification generator. Currently supports the OpenAPI Specification (f.k.a. the Swagger specification)."
+dependencies = [
+    "PyYAML>=3.10",
+    "apispec==6.4.0",
 ]
 files = [
     {file = "apispec-6.4.0-py3-none-any.whl", hash = "sha256:00ac876f1968d8e1624400c8571d2a2887edd3d6aa9d1a130efaafbdb49e85d7"},
@@ -127,6 +155,18 @@ dependencies = [
 files = [
     {file = "flask_sqlalchemy-3.1.1-py3-none-any.whl", hash = "sha256:4ba4be7f419dc72f4efd8802d69974803c37259dd42f3913b0dcf75c9447e0a0"},
     {file = "flask_sqlalchemy-3.1.1.tar.gz", hash = "sha256:e4b68bb881802dda1a7d878b2fc84c06d1ee57fb40b874d3dc97dabfa36b8312"},
+]
+
+[[package]]
+name = "flask-swagger-ui"
+version = "4.11.1"
+summary = "Swagger UI blueprint for Flask"
+dependencies = [
+    "flask",
+]
+files = [
+    {file = "flask-swagger-ui-4.11.1.tar.gz", hash = "sha256:a370199a780d678b32e38f1be10d4d81efa0ee63e9fe2fb766ff1a4b6c37dac8"},
+    {file = "flask_swagger_ui-4.11.1-py3-none-any.whl", hash = "sha256:c951928fe4592d3561b543e0e1ca32703f55d3474de86c894a9d27f795d96c83"},
 ]
 
 [[package]]

@@ -4,7 +4,9 @@ version = "0.1.0"
 description = "INT20H test task"
 authors = [
     {name = "frolkin28", email = "frolkin2801@gmail.com"},
-    {name = "frolkin28", email = "frolkin2801@gmail.com"},
+    {name = "1vanBilous", email = ""},
+    {name = "1vanBilous", email = ""},
+    {name = "OleksandrBilous", email = ""},
 ]
 dependencies = [
     "flask>=3.0.2",
@@ -15,8 +17,10 @@ dependencies = [
     "marshmallow>=3.20.2",
     "apispec>=6.4.0",
     "Flask-JWT-Extended>=4.6.0",
+    "apispec-webframeworks>=1.0.0",
+    "flask-swagger-ui>=4.11.1",
 ]
-requires-python = ">=3.12"
+requires-python = ">=3.11"
 
 [build-system]
 requires = ["pdm-backend"]
