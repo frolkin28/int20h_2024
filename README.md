@@ -8,7 +8,6 @@ urls:
 
 # First run
 - `docker compose up --build backend`
-- `docker compose run --rm backend flask --app backend db init`
 - `docker compose run --rm backend flask --app backend db upgrade`
 
 
