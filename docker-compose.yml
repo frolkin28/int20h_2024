@@ -13,6 +13,7 @@ services:
       - ./backend:/app/backend
       - ./config:/app/config
       - ./pyproject.toml:/app/pyproject.toml
+      - ./pdm.lock:/app/pdm.lock
       - ./migrations:/app/migrations
 
   postgres:
