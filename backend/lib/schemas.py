@@ -8,6 +8,14 @@ class SignUpSchema(Schema):
     password = fields.Str(required=True)
 
 
+class AuthResponse(Schema):
+    user_id = fields.Int(required=True)
+
+
+class ErrorMessageResponse(Schema):
+    message = fields.Str(required=True)
+
+
 class SignInSchema(Schema):
     login = fields.Str(required=True)
     password = fields.Str(required=True)

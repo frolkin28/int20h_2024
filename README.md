@@ -1,5 +1,10 @@
 ### INT20H 2024
 
+# Project info:
+urls:
+- api: `http://localhost:8080/api`
+- apidocs: `http://localhost:8080/docs/`
+
 
 # First run
 - `docker compose up --build backend`
