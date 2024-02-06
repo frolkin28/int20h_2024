@@ -20,8 +20,23 @@ COPY pyproject.toml .
 COPY pdm.lock .
 RUN pdm install --no-lock --no-editable --prod
 
+ENTRYPOINT ["pdm", "run"]
+
 # ==== dev backend build (don`t need to copy source code, because of mounting)
 FROM base AS dev
+
 ENV BACKEND_CONFIG_PATH "config/app/dev.yaml"
-ENTRYPOINT ["pdm", "run"]
 CMD ["flask", "--app", "backend", "run", "--debug", "--host", "0.0.0.0", "--port", "8080"]
+
+# ==== production stage ====
+FROM base AS prd
+
+ENV BACKEND_CONFIG_PATH "config/app/prd.yaml"
+COPY config /app/config
+COPY backend /app/backend
+COPY pyproject.toml /app/pyproject.toml
+COPY pdm.lock /app/pdm.lock
+COPY migrations /app/migrations
+
+CMD ["flask", "--app", "backend", "run", "--host", "0.0.0.0", "--port", "8080"]
+
