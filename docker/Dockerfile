@@ -31,7 +31,7 @@ CMD ["flask", "--app", "backend", "run", "--debug", "--host", "0.0.0.0", "--port
 # ==== production stage ====
 FROM base AS prd
 
-ENV BACKEND_CONFIG_PATH "config/prd.yaml"
+ENV BACKEND_CONFIG_PATH "config/app/prd.yaml"
 COPY config /app/config
 COPY backend /app/backend
 
