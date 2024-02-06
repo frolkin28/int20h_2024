@@ -13,7 +13,7 @@ class AuthResponse(Schema):
 
 
 class ErrorMessageResponse(Schema):
-    user_id = fields.Int(required=True)
+    message = fields.Str(required=True)
 
 
 class SignInSchema(Schema):
