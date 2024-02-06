@@ -5,7 +5,7 @@ description = "INT20H test task"
 authors = [
     {name = "frolkin28", email = "frolkin2801@gmail.com"},
     {name = "1vanBilous", email = ""},
-    {name = "1vanBilous", email = ""},
+    {name = "nastyafomenko", email = ""},
     {name = "OleksandrBilous", email = ""},
 ]
 dependencies = [
