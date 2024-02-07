@@ -8,10 +8,13 @@ from backend.lib.schemas import (
     SignInSchema,
     AuthResponse,
     ErrorMessageResponse,
+    AddLotSchema,
+    LotResponse,
 )
 
 
-TAGS = ({"name": "auth", "description": "Ендпоінти для аутентифікації"},)
+TAGS = ({"name": "auth", "description": "Ендпоінти для аутентифікації"},
+        {"name": "lots", "description": "Ендпоінти лотів аукіону"})
 EXCLUDED_ENDPOINTS = {
     "static",
     "swagger",
@@ -43,6 +46,9 @@ def get_apispec(app: Flask) -> APISpec:
     spec.components.schema("SignInSchema", schema=SignInSchema)
     spec.components.schema("AuthResponse", schema=AuthResponse)
     spec.components.schema("ErrorMessageResponse", schema=ErrorMessageResponse)
+    spec.components.schema("AddLotSchema", schema=AddLotSchema)
+    spec.components.schema("LotResponse", schema=LotResponse)
+
 
     create_tags(spec)
 
