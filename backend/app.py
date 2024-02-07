@@ -1,17 +1,24 @@
 import json
-from apispec import APISpec
+import logging
 from backend.lib.apispec import get_apispec
 from flask import Flask
 from flask_jwt_extended import JWTManager
+from flask_socketio import SocketIO
 
 from backend.handlers import health, auth, lots, swagger
 from backend.config import get_config
 from backend.services.db import db, migrate
 
 
-def create_app() -> Flask:
+def create_app() -> tuple[SocketIO, Flask]:
     app = Flask(__name__)
-    app.config.from_object(get_config())
+    config = get_config()
+    app.config.from_object(config)
+
+    # if not config.DEBUG:
+    gunicorn_logger = logging.getLogger("gunicorn.error")
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 
     app.register_blueprint(health.bp)
     app.register_blueprint(auth.bp)
@@ -28,4 +35,7 @@ def create_app() -> Flask:
 
     app.register_blueprint(swagger.bp)
 
-    return app
+    socketio = SocketIO(path="/ws")
+    socketio.init_app(app)
+
+    return socketio, app

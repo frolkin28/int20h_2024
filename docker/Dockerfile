@@ -26,8 +26,8 @@ ENTRYPOINT ["pdm", "run"]
 FROM base AS dev
 
 ENV BACKEND_CONFIG_PATH "config/app/dev.yaml"
-CMD ["flask", "--app", "backend", "run", "--debug", "--host", "0.0.0.0", "--port", "8080"]
 
+CMD [ "python", "-m", "backend" ]
 # ==== production stage ====
 FROM base AS prd
 
@@ -38,5 +38,4 @@ COPY pyproject.toml /app/pyproject.toml
 COPY pdm.lock /app/pdm.lock
 COPY migrations /app/migrations
 
-CMD ["flask", "--app", "backend", "run", "--host", "0.0.0.0", "--port", "8080"]
-
+CMD ["gunicorn", "-k", "eventlet", "-w", "4", "-b", "0.0.0.0:8080", "--log-level=info", "backend.wsgi:app"]
