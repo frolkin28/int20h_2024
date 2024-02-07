@@ -1,4 +1,5 @@
 import typing as t
+from datetime import datetime
 
 
 class SignUpPayload(t.TypedDict):
@@ -11,3 +12,9 @@ class SignUpPayload(t.TypedDict):
 class SignInPayload(t.TypedDict):
     login: str
     password: str
+
+class AddLotPayload(t.TypedDict):
+    lot_name: str
+    description: str
+    end_date: datetime
+

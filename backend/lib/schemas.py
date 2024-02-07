@@ -19,3 +19,14 @@ class ErrorMessageResponse(Schema):
 class SignInSchema(Schema):
     login = fields.Str(required=True)
     password = fields.Str(required=True)
+
+
+class AddLotSchema(Schema):
+    lot_name = fields.Str(required=True)
+    description = fields.Str()
+    end_date = fields.DateTime(required=True)
+
+class LotResponse(Schema):
+    lot_id = fields.Int(required=True)
+
+
