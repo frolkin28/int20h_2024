@@ -71,7 +71,7 @@ def login_required(func: TFunc) -> TFunc:
 
     @app.route("/example")
     @login_required
-    def example(user: User):
+    def example():
         pass
     """
 
