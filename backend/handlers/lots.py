@@ -5,10 +5,10 @@ from flask import Blueprint, jsonify, request
 from marshmallow import ValidationError
 from flask_jwt_extended import jwt_required, current_user
 
-from backend.lib.schemas import AddLotSchema
-from backend.types import AddLotPayload
+from backend.lib.schemas import LotSchema
+from backend.types import LotPayload
 
-from backend.lib.lots import create_lot
+from backend.lib.lots import create_lot, update_lot_data
 
 
 bp = Blueprint("lots", __name__, url_prefix="/api/lots")
@@ -58,8 +58,8 @@ def add_lot():
 
     try:
         request_data = cast(
-            AddLotPayload,
-            AddLotSchema().load(
+            LotPayload,
+            LotSchema().load(
                 {
                     "lot_name": request.form.get("lot_name"),
                     "description": request.form.get("description"),
@@ -74,3 +74,47 @@ def add_lot():
     lot_id = create_lot(request_data, request_pictures, user_id)
 
     return success_response(data={"lot_id": lot_id})
+
+
+
+@bp.route("/update_lot/<int:id>", methods=("PUT",))
+@jwt_required()
+def update_lot(id):
+    """
+        put:
+        summary: update lot
+        requestBody:
+            content:
+              application/json:
+                schema:
+                  LotDataSchema
+        responses:
+            '200':
+                content:
+                    application/json:
+                        schema: LotResponse
+            '400':
+                content:
+                    application/json:
+                        schema: CreateLotErrorResponse
+        tags:
+        - lots
+    """
+    user_id = current_user.id
+
+    try:
+        request_data = cast(
+            LotPayload,
+            LotSchema().load({
+                "lot_name": request.form.get('lot_name'),
+                "description": request.form.get('description'),
+                "end_date": request.form.get('end_date'),
+            })
+        )
+    except ValidationError as e:
+        return jsonify({"errors": e.messages}), 400
+    
+    lot_id = update_lot_data(request_data, user_id, id)
+
+    response = jsonify({"lot_id": lot_id})
+    return response

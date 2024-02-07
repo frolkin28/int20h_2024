@@ -14,8 +14,7 @@ class SignInPayload(t.TypedDict):
     email: str
     password: str
 
-
-class AddLotPayload(t.TypedDict):
+class LotPayload(t.TypedDict):
     lot_name: str
     description: str
     end_date: datetime

@@ -26,3 +26,7 @@ class LotEndedError(Exception):
     def __init__(self):
         self.message = "Lot is ended, you can`t make a bet"
         super().__init__(self.message)
+
+        
+class PermissionError(Exception):
+    pass
