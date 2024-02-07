@@ -23,6 +23,11 @@ from backend.types import SignInPayload
 from backend.services.db import db
 
 
+TReturn = t.TypeVar("TReturn")
+TFunc = t.Callable[..., TReturn]
+TFuncWithUser = t.Callable[t.Concatenate[User, ...], TReturn]
+
+
 def create_user(payload: SignInPayload) -> int:
     user = User(
         login=payload["login"],
@@ -60,12 +65,16 @@ def get_user_by_id(user_id: int) -> User:
     return db.session.query(User).get(user_id)
 
 
-TReturn = t.TypeVar("TReturn")
-TFunc = t.Callable[..., TReturn]
-TFuncWithUser = t.Callable[t.Concatenate[User, ...], TReturn]
-
-
 def login_required(func: TFunc) -> TFunc:
+    """
+    Usage:
+
+    @app.route("/example")
+    @login_required
+    def example(user: User):
+        pass
+    """
+
     @wraps(func)
     def wrapper(*args: t.Any, **kwargs: t.Any) -> TReturn:
         try:
@@ -84,6 +93,15 @@ def login_required(func: TFunc) -> TFunc:
 
 
 def with_auth_user(func: TFunc) -> TFuncWithUser:
+    """
+    Usage:
+
+    @app.route("/example")
+    @with_auth_user
+    def example(user: User):
+        pass
+    """
+
     @wraps(func)
     def wrapper(*args: t.Any, **kwargs: t.Any) -> TReturn:
         try:
