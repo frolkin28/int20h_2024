@@ -20,3 +20,9 @@ class InvalidLotID(Exception):
     def __init__(self):
         self.message = "Invalid lot ID"
         super().__init__(self.message)
+
+
+class LotEndedError(Exception):
+    def __init__(self):
+        self.message = "Lot is ended, you can`t make a bet"
+        super().__init__(self.message)

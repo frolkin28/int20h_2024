@@ -1,6 +1,7 @@
 from marshmallow import Schema, fields, ValidationError
 
-from backend.lib.lots import lot_exists
+from backend.lib.lots import lot_exists, schema_lot_validator
+from backend.exc import LotEndedError, LotDoesNotExist
 
 
 class SignUpSchema(Schema):
@@ -51,8 +52,10 @@ class BetResponseSchema(Schema):
 
 
 def lot_id_validator(value: int):
-    if not lot_exists(value):
-        raise ValidationError("Lot with this ID does not exist")
+    try:
+        schema_lot_validator(value)
+    except (LotEndedError, LotDoesNotExist) as e:
+        raise ValidationError(e.message)
 
 
 def amount_validator(value: int):

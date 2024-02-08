@@ -1,8 +1,10 @@
+from datetime import datetime
 from typing import Any
+
 from backend.models import Lot, Picture
 from backend.types import AddLotPayload
 from backend.services.db import db
-from backend.exc import LotDoesNotExist, InvalidLotID
+from backend.exc import LotDoesNotExist, InvalidLotID, LotEndedError
 
 from datetime import date
 
@@ -56,5 +58,13 @@ def validate_lot_id(raw_id: Any) -> int:
 
     if not lot_exists(lot_id):
         raise LotDoesNotExist
-    
+
     return lot_id
+
+
+def schema_lot_validator(value: int):
+    lot = get_lot_by_id(value)
+    if not lot:
+        raise LotDoesNotExist
+    if lot.end_date < datetime.now():
+        raise LotEndedError
