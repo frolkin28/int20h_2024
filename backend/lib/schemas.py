@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields, ValidationError
 
-from backend.lib.lots import lot_exists, schema_lot_validator
+from backend.lib.lots import schema_lot_validator
 from backend.exc import LotEndedError, LotDoesNotExist
 
 
@@ -33,22 +33,6 @@ class AddLotSchema(Schema):
 
 class LotResponse(Schema):
     lot_id = fields.Int(required=True)
-
-
-class CustomDateTimeField(fields.Field):
-    def _serialize(self, value, *args, **kwargs) -> str | None:
-        if value is None:
-            return None
-        return value.strftime("%Y-%m-%d %H:%M:%S")
-
-
-class BetResponseSchema(Schema):
-    id = fields.Int(required=True)
-    amount = fields.Int(required=True)
-    creation_date = CustomDateTimeField(
-        attribute="creation_date",
-        required=True,
-    )
 
 
 def lot_id_validator(value: int):

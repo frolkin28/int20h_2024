@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import timedelta
 from pathlib import Path
 
 from backend.utils import get_env, read_yaml
@@ -14,6 +15,7 @@ class Config:
     JWT_SECRET_KEY: str
     JWT_TOKEN_LOCATION: list[str]
     SECRET_KEY: str
+    JWT_ACCESS_TOKEN_EXPIRES: timedelta
     JWT_COOKIE_SECURE: bool = True
 
 
@@ -27,6 +29,7 @@ def get_config() -> Config:
             JWT_SECRET_KEY="123124324324234",
             JWT_TOKEN_LOCATION=["headers"],
             SECRET_KEY="QER2#$%&%&**@egrhtjk",
+            JWT_ACCESS_TOKEN_EXPIRES=timedelta(days=30),
         )
     except KeyError as e:
         raise RuntimeError("Invalid config format") from e

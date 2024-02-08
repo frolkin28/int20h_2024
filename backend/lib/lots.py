@@ -43,11 +43,7 @@ def create_lot(payload: AddLotPayload, pictures: list, user_id: int) -> int:
 
 
 def get_lot_by_id(lot_id: int) -> Lot | None:
-    return db.session.query(Lot).get(lot_id)
-
-
-def lot_exists(lot_id: int) -> bool:
-    return get_lot_by_id(lot_id) is not None
+    return Lot.query.filter(Lot.id == lot_id).one_or_none()
 
 
 def validate_lot_id(raw_id: Any) -> int:
@@ -56,7 +52,8 @@ def validate_lot_id(raw_id: Any) -> int:
     except (TypeError, ValueError) as e:
         raise InvalidLotID from e
 
-    if not lot_exists(lot_id):
+    lot = get_lot_by_id(lot_id)
+    if lot is None:
         raise LotDoesNotExist
 
     return lot_id
@@ -64,7 +61,7 @@ def validate_lot_id(raw_id: Any) -> int:
 
 def schema_lot_validator(value: int):
     lot = get_lot_by_id(value)
-    if not lot:
+    if lot is None:
         raise LotDoesNotExist
-    if lot.end_date < datetime.now():
+    if lot.end_date <= datetime.now():
         raise LotEndedError

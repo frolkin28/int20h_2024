@@ -24,7 +24,7 @@ def user_identity_lookup(user: User) -> int:
 
 
 def get_user_by_identity(identity: int) -> User | None:
-    return User.query.filter_by(id=identity).one_or_none()
+    return User.query.filter(User.id == identity).one_or_none()
 
 
 @jwt.user_lookup_loader
@@ -61,12 +61,12 @@ def create_user(payload: SignInPayload) -> User:
 
 def authenticate_user(email: str, password: str) -> User:
     user = (
-        db.session.query(
+        User.query.with_entities(
             User.id,
             User.password,
         )
         .filter(User.email == email)
-        .first()
+        .one_or_none()
     )
     if user is None:
         raise UserDoesNotExist
