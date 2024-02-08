@@ -25,7 +25,7 @@ def get_config() -> Config:
             DEBUG=settings_from_file["debug"],
             SQLALCHEMY_DATABASE_URI=settings_from_file["db_uri"],
             JWT_SECRET_KEY="123124324324234",
-            JWT_TOKEN_LOCATION=["cookies"],
+            JWT_TOKEN_LOCATION=["headers"],
             SECRET_KEY="QER2#$%&%&**@egrhtjk",
         )
     except KeyError as e:

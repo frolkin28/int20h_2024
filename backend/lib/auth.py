@@ -1,15 +1,7 @@
-from functools import wraps
-import typing as t
+from datetime import datetime
 
-from flask import Response, jsonify
-from flask_jwt_extended import (
-    create_access_token,
-    create_refresh_token,
-    set_access_cookies,
-    set_refresh_cookies,
-)
-from flask_jwt_extended import get_jwt_identity, verify_jwt_in_request
-from flask_jwt_extended.exceptions import NoAuthorizationError
+from flask_jwt_extended import JWTManager, decode_token
+from jwt import ExpiredSignatureError
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -18,19 +10,42 @@ from backend.exc import (
     UserDoesNotExist,
     AuthenticationError,
 )
-from backend.models import User
+from backend.models import TokenBlocklist, User
 from backend.types import SignInPayload
 from backend.services.db import db
 
 
-TReturn = t.TypeVar("TReturn")
-TFunc = t.Callable[..., TReturn]
-TFuncWithUser = t.Callable[t.Concatenate[User, ...], TReturn]
+jwt = JWTManager()
 
 
-def create_user(payload: SignInPayload) -> int:
+@jwt.user_identity_loader
+def user_identity_lookup(user: User) -> int:
+    return user.id
+
+
+def get_user_by_identity(identity: int) -> User | None:
+    return User.query.filter_by(id=identity).one_or_none()
+
+
+@jwt.user_lookup_loader
+def user_lookup_callback(_, jwt_data: dict):
+    identity = jwt_data["sub"]
+    return get_user_by_identity(identity)
+
+
+@jwt.token_in_blocklist_loader
+def check_if_token_revoked(_, jwt_payload: dict) -> bool:
+    jti = jwt_payload["jti"]
+    token = (
+        db.session.query(TokenBlocklist.id).filter(TokenBlocklist.jti == jti).scalar()
+    )
+
+    return token is not None
+
+
+def create_user(payload: SignInPayload) -> User:
     user = User(
-        login=payload["login"],
+        email=payload["email"],
         first_name=payload["first_name"],
         last_name=payload["last_name"],
         password=generate_password_hash(payload["password"]),
@@ -41,80 +56,38 @@ def create_user(payload: SignInPayload) -> int:
     except IntegrityError as e:
         raise UserAlreadyExist from e
 
-    return user.id
+    return user
 
 
-def authenticate_user(login: str, password: str) -> int:
-    user = db.session.query(User.id, User.password).filter(User.login == login).first()
+def authenticate_user(email: str, password: str) -> User:
+    user = (
+        db.session.query(
+            User.id,
+            User.password,
+        )
+        .filter(User.email == email)
+        .first()
+    )
     if user is None:
         raise UserDoesNotExist
     if not check_password_hash(user.password, password):
         raise AuthenticationError
-    return user.id
+    return user
 
 
-def set_tokens_cookies(response: Response, user_id: int):
-    access_token = create_access_token(identity=user_id)
-    refresh_token = create_refresh_token(identity=user_id)
-
-    set_access_cookies(response, access_token)
-    set_refresh_cookies(response, refresh_token)
+def revoke_token(jti: str):
+    now = datetime.now()
+    db.session.add(TokenBlocklist(jti=jti, created_at=now))
+    db.session.commit()
 
 
-def get_user_by_id(user_id: int) -> User:
-    return db.session.query(User).get(user_id)
+def verify_user_token(token: str | None) -> User | None:
+    if not token:
+        return None
+    try:
+        jwt_data = decode_token(token)
+    except ExpiredSignatureError:
+        return None
 
-
-def login_required(func: TFunc) -> TFunc:
-    """
-    Usage:
-
-    @app.route("/example")
-    @login_required
-    def example():
-        pass
-    """
-
-    @wraps(func)
-    def wrapper(*args: t.Any, **kwargs: t.Any) -> TReturn:
-        try:
-            if not verify_jwt_in_request():
-                return jsonify({}), 401
-        except NoAuthorizationError:
-            return jsonify({}), 401
-
-        user_id = get_jwt_identity()
-        if not get_user_by_id(user_id):
-            return jsonify({}), 401
-
-        return func(*args, **kwargs)
-
-    return t.cast(TFunc, wrapper)
-
-
-def with_auth_user(func: TFunc) -> TFuncWithUser:
-    """
-    Usage:
-
-    @app.route("/example")
-    @with_auth_user
-    def example(user: User):
-        pass
-    """
-
-    @wraps(func)
-    def wrapper(*args: t.Any, **kwargs: t.Any) -> TReturn:
-        try:
-            if not verify_jwt_in_request():
-                return jsonify({}), 401
-        except NoAuthorizationError:
-            return jsonify({}), 401
-
-        user_id = get_jwt_identity()
-        user = get_user_by_id(user_id)
-        if not user:
-            return jsonify({}), 401
-
-        return func(user, *args, **kwargs)
-
-    return t.cast(TFuncWithUser, wrapper)
+    identity = jwt_data["sub"]
+    return get_user_by_identity(identity)

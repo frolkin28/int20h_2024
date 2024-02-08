@@ -1,15 +1,18 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, ValidationError
+
+from backend.lib.lots import lot_exists
 
 
 class SignUpSchema(Schema):
     first_name = fields.Str(required=True)
     last_name = fields.Str(required=True)
-    login = fields.Str(required=True)
+    email = fields.Str(required=True)
     password = fields.Str(required=True)
 
 
 class AuthResponse(Schema):
     user_id = fields.Int(required=True)
+    access_token = fields.Str(required=True)
 
 
 class ErrorMessageResponse(Schema):
@@ -17,7 +20,7 @@ class ErrorMessageResponse(Schema):
 
 
 class SignInSchema(Schema):
-    login = fields.Str(required=True)
+    email = fields.Str(required=True)
     password = fields.Str(required=True)
 
 
@@ -26,7 +29,37 @@ class AddLotSchema(Schema):
     description = fields.Str()
     end_date = fields.DateTime(required=True)
 
+
 class LotResponse(Schema):
     lot_id = fields.Int(required=True)
 
 
+class CustomDateTimeField(fields.Field):
+    def _serialize(self, value, *args, **kwargs) -> str | None:
+        if value is None:
+            return None
+        return value.strftime("%Y-%m-%d %H:%M:%S")
+
+
+class BetResponseSchema(Schema):
+    id = fields.Int(required=True)
+    amount = fields.Int(required=True)
+    creation_date = CustomDateTimeField(
+        attribute="creation_date",
+        required=True,
+    )
+
+
+def lot_id_validator(value: int):
+    if not lot_exists(value):
+        raise ValidationError("Lot with this ID does not exist")
+
+
+def amount_validator(value: int):
+    if value < 0:
+        raise ValidationError("Invalid bet amount")
+
+
+class BetCreationSchema(Schema):
+    lot_id = fields.Int(required=True, validate=lot_id_validator)
+    amount = fields.Int(required=True, validate=amount_validator)
