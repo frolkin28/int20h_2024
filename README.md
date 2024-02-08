@@ -8,7 +8,7 @@ urls:
 
 ### First run
 - `docker compose up --build backend`
-- `docker compose run --rm backend flask --app backend db upgrade`
+- `docker compose run --rm backend flask --app backend.wsgi:app db upgrade`
 
 
 ### Run Backend
@@ -16,9 +16,9 @@ urls:
 
 
 ### Migrations
-- Init: `docker compose run --rm backend flask --app backend db init`
-- Create revision: `docker compose run --rm backend flask --app backend db migrate -m "<some message>"`
-- Upgrade to latest revision: `docker compose run --rm backend flask --app backend db upgrade`
+- Init: `docker compose run --rm backend flask --app backend.wsgi:app db init`
+- Create revision: `docker compose run --rm backend flask --app backend.wsgi:app db migrate -m "<some message>"`
+- Upgrade to latest revision: `docker compose run --rm backend flask --app backend.wsgi:app db upgrade`
 
 
 ### Proper python package installation
