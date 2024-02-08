@@ -14,6 +14,8 @@ urls:
 ### Run Backend
 - `docker compose up backend`
 
+# Run Frontned
+- `yarn --cwd ./frontend start`
 
 ### Migrations
 - Init: `docker compose run --rm backend flask --app backend.wsgi:app db init`
