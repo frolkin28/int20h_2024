@@ -28,7 +28,7 @@ class Bet(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     lot_id = db.Column(db.Integer, db.ForeignKey('lots.id'))
-    amount = db.Column(db.Integer)                                     # Якщо використовуєм копійки
+    amount = db.Column(db.Integer)  # Якщо використовуєм копійки
     creation_date = db.Column(db.DateTime)
 
 

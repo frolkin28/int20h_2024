@@ -1,7 +1,6 @@
-from logging import getLogger
 from typing import cast
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, current_app
 from marshmallow import ValidationError
 from flask_jwt_extended import unset_jwt_cookies, jwt_required
 
@@ -16,7 +15,6 @@ from backend.lib.auth import (
     UserDoesNotExist,
 )
 
-log = getLogger(__name__)
 
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
@@ -55,7 +53,7 @@ def sign_up():
     try:
         user_id = create_user(request_data)
     except UserAlreadyExist:
-        log.warning(f"User({request_data['login']}) already exists")
+        current_app.logger.warning(f"User({request_data['login']}) already exists")
         return jsonify({"message": "User already exists"}), 409
 
     response = jsonify({"user_id": user_id})
@@ -100,10 +98,10 @@ def sign_in():
             password=request_data["password"],
         )
     except AuthenticationError:
-        log.warning(f"Ivalid password")
+        current_app.logger.warning(f"Ivalid password")
         return jsonify({"message": "Unauthorized"}), 401
     except UserDoesNotExist:
-        log.warning(f"No such user: {request_data['login']}")
+        current_app.logger.warning(f"No such user: {request_data['login']}")
         return jsonify({"message": "User not found"}), 401
 
     response = jsonify({"user_id": user_id})
