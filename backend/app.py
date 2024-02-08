@@ -5,7 +5,7 @@ from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_socketio import SocketIO
 
-from backend.handlers import health, auth, lots, swagger
+from backend.handlers import health, auth, lots, swagger, websocket
 from backend.config import get_config
 from backend.services.db import db, migrate
 
@@ -14,11 +14,6 @@ def create_app() -> tuple[SocketIO, Flask]:
     app = Flask(__name__)
     config = get_config()
     app.config.from_object(config)
-
-    # if not config.DEBUG:
-    gunicorn_logger = logging.getLogger("gunicorn.error")
-    app.logger.handlers = gunicorn_logger.handlers
-    app.logger.setLevel(gunicorn_logger.level)
 
     app.register_blueprint(health.bp)
     app.register_blueprint(auth.bp)
@@ -37,5 +32,6 @@ def create_app() -> tuple[SocketIO, Flask]:
 
     socketio = SocketIO(path="/ws")
     socketio.init_app(app)
+    socketio.on_namespace(websocket.BetsLogNamespace('/bets'))
 
     return socketio, app

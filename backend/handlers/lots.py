@@ -1,4 +1,3 @@
-from logging import getLogger
 from typing import cast
 
 from flask import Blueprint, jsonify, request
@@ -10,12 +9,8 @@ from backend.lib.schemas import AddLotSchema
 from backend.types import AddLotPayload
 from backend.models import User
 
-from backend.lib.lots import (
-    create_lot
-)
+from backend.lib.lots import create_lot
 
-
-log = getLogger(__name__)
 
 bp = Blueprint("lots", __name__, url_prefix="/api/lots")
 
@@ -45,22 +40,23 @@ def add_lot(user: User):
         - lots
     """
     user_id = user.id
-    
+
     try:
         request_data = cast(
             AddLotPayload,
-            AddLotSchema().load({
-                "lot_name": request.form.get('lot_name'),
-                "description": request.form.get('description'),
-                "end_date": request.form.get('end_date'),
-            })
+            AddLotSchema().load(
+                {
+                    "lot_name": request.form.get("lot_name"),
+                    "description": request.form.get("description"),
+                    "end_date": request.form.get("end_date"),
+                }
+            ),
         )
     except ValidationError as e:
         return jsonify({"errors": e.messages}), 400
-    
-    request_pictures = request.files.getlist('file')
+
+    request_pictures = request.files.getlist("file")
     lot_id = create_lot(request_data, request_pictures, user_id)
 
-    
     response = jsonify({"lot_id": lot_id})
     return response
