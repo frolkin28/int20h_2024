@@ -71,4 +71,4 @@ def serialize_new_bet(user: User, bet: Bet) -> dict:
             ),
         )
     ]
-    return {"bets": bets_for_display}
+    return serialize_bets(bets_for_display)
