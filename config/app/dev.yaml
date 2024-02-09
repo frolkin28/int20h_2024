@@ -1,3 +1,7 @@
 debug: true
 
-db_uri: postgresql+psycopg2://postgres:postgres@postgres:5432/int20h
+sqlalchemy_database_uri: postgresql+psycopg2://postgres:postgres@postgres:5432/int20h
+jwt_secret_key: ab99544cb135a5f7b2dcabd4a00367db48722616e76911bb
+secret_key: f4646c6decb230611b6577c45fb473215367c58f24300433
+jwt_access_token_expires: 30
+aws_s3_domain: dq5d23gxa9vto.cloudfront.net

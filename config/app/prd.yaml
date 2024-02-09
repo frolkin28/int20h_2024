@@ -1,3 +1,4 @@
 debug: false
 
-db_uri: postgresql+psycopg2://int20h_2024_aged_butterfly_826:Oqml4oiDcnsVybW@int20h.flycast:5432/int20h_2024_aged_butterfly_826?sslmode=disable
+jwt_access_token_expires: 60
+aws_s3_domain: dq5d23gxa9vto.cloudfront.net

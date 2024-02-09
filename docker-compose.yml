@@ -15,6 +15,7 @@ services:
       - ./pyproject.toml:/app/pyproject.toml
       - ./pdm.lock:/app/pdm.lock
       - ./migrations:/app/migrations
+      - ./.env:/app/.env
 
   postgres:
     image: postgres:16.0
