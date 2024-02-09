@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from backend.services.db import db
 
 
@@ -33,7 +35,6 @@ class Bet(db.Model):
 
 
 class Picture(db.Model):
-
     __tablename__ = "pictures"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -47,3 +48,13 @@ class TokenBlocklist(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     jti = db.Column(db.String(36), nullable=False, index=True)
     created_at = db.Column(db.DateTime, nullable=False)
+
+
+class Message(db.Model):
+    __tablename__ = "message"
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(512), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    lot_id = db.Column(db.Integer, db.ForeignKey("lots.id"))
+    created_at = db.Column(db.DateTime, nullable=datetime.now, nullable=False)
