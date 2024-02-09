@@ -41,6 +41,7 @@ class BetsLogNamespace(Namespace):
         self.emit(
             AuctionEvents.BETS_LOG_UPDATE.value,
             json_response,
+            room=request.sid,
         )
 
     def on_bet(self, data: dict):
@@ -81,4 +82,4 @@ class BetsLogNamespace(Namespace):
         self.disconnect(request.sid)
 
     def emit_message(self, event: AuctionEvents, message: str | dict):
-        self.emit(event.value, {"message": message})
+        self.emit(event.value, {"message": message}, room=request.sid)
