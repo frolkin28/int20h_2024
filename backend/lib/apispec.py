@@ -6,15 +6,20 @@ from apispec_webframeworks.flask import FlaskPlugin
 from backend.lib.schemas import (
     SignUpSchema,
     SignInSchema,
-    AuthResponse,
     ErrorMessageResponse,
     AddLotSchema,
-    LotResponse,
+    CreateLotSuccessResponse,
+    SignInErrorResponse,
+    SignUpErrorResponse,
+    CreateLotErrorResponse,
+    AuthSuccessResponse,
 )
 
 
-TAGS = ({"name": "auth", "description": "Ендпоінти для аутентифікації"},
-        {"name": "lots", "description": "Ендпоінти лотів аукіону"})
+TAGS = (
+    {"name": "auth", "description": "Ендпоінти для аутентифікації"},
+    {"name": "lots", "description": "Ендпоінти лотів аукіону"},
+)
 EXCLUDED_ENDPOINTS = {
     "static",
     "swagger",
@@ -44,11 +49,14 @@ def get_apispec(app: Flask) -> APISpec:
 
     spec.components.schema("SignUpSchema", schema=SignUpSchema)
     spec.components.schema("SignInSchema", schema=SignInSchema)
-    spec.components.schema("AuthResponse", schema=AuthResponse)
-    spec.components.schema("ErrorMessageResponse", schema=ErrorMessageResponse)
     spec.components.schema("AddLotSchema", schema=AddLotSchema)
-    spec.components.schema("LotResponse", schema=LotResponse)
 
+    spec.components.schema("AuthSuccessResponse", schema=AuthSuccessResponse)
+    spec.components.schema("ErrorMessageResponse", schema=ErrorMessageResponse)
+    spec.components.schema("CreateLotSuccessResponse", schema=CreateLotSuccessResponse)
+    spec.components.schema("SignInErrorResponse", schema=SignInErrorResponse)
+    spec.components.schema("SignUpErrorResponse", schema=SignUpErrorResponse)
+    spec.components.schema("CreateLotErrorResponse", schema=CreateLotErrorResponse)
 
     create_tags(spec)
 
