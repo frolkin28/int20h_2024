@@ -7,7 +7,6 @@ from backend.lib.schemas import (
     SignUpSchema,
     SignInSchema,
     ErrorMessageResponse,
-    AddLotSchema,
     CreateLotSuccessResponse,
     SignInErrorResponse,
     SignUpErrorResponse,
@@ -49,7 +48,6 @@ def get_apispec(app: Flask) -> APISpec:
 
     spec.components.schema("SignUpSchema", schema=SignUpSchema)
     spec.components.schema("SignInSchema", schema=SignInSchema)
-    spec.components.schema("AddLotSchema", schema=AddLotSchema)
 
     spec.components.schema("AuthSuccessResponse", schema=AuthSuccessResponse)
     spec.components.schema("ErrorMessageResponse", schema=ErrorMessageResponse)
