@@ -1,6 +1,6 @@
 from typing import cast
 
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, request, current_app
 from marshmallow import ValidationError
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt
 
@@ -14,6 +14,7 @@ from backend.lib.auth import (
     UserDoesNotExist,
     revoke_token,
 )
+from backend.utils import success_response, error_response
 
 
 bp = Blueprint("auth", __name__, url_prefix="/api/auth")
@@ -34,7 +35,11 @@ def sign_up():
             '200':
                 content:
                     application/json:
-                        schema: AuthResponse
+                        schema: AuthSuccessResponse
+            '400':
+                content:
+                    application/json:
+                        schema: SignUpErrorResponse
             '409':
                 content:
                     application/json:
@@ -48,16 +53,20 @@ def sign_up():
             SignUpSchema().load(request.get_json()),
         )
     except ValidationError as e:
-        return jsonify({"errors": e.messages}), 400
+        return error_response(status_code=400, errors=e.messages)
 
     try:
         user = create_user(request_data)
     except UserAlreadyExist:
         current_app.logger.warning(f"User({request_data['email']}) already exists")
-        return jsonify({"message": "User already exists"}), 409
+        return error_response(
+            status_code=409, errors={"message": "User already exists"}
+        )
 
     access_token = create_access_token(identity=user)
-    return jsonify(access_token=access_token, user_id=user.id)
+    return success_response(
+        data={"access_token": access_token, "user_id": user.id},
+    )
 
 
 @bp.route("/sign_in", methods=("POST",))
@@ -75,7 +84,11 @@ def sign_in():
             '200':
                 content:
                     application/json:
-                        schema: AuthResponse
+                        schema: AuthSuccessResponse
+            '400':
+                content:
+                    application/json:
+                        schema: SignInErrorResponse
             '401':
                 content:
                     application/json:
@@ -89,7 +102,7 @@ def sign_in():
             SignInSchema().load(request.get_json()),
         )
     except ValidationError as e:
-        return jsonify({"errors": e.messages}), 400
+        return error_response(status_code=400, errors=e.messages)
 
     try:
         user = authenticate_user(
@@ -98,13 +111,21 @@ def sign_in():
         )
     except AuthenticationError:
         current_app.logger.warning(f"Ivalid password")
-        return jsonify({"message": "Unauthorized"}), 401
+        return error_response(
+            status_code=401,
+            errors={"message": "Unauthorized"},
+        )
     except UserDoesNotExist:
         current_app.logger.warning(f"No such user: {request_data['email']}")
-        return jsonify({"message": "User not found"}), 401
+        return error_response(
+            status_code=401,
+            errors={"message": "User not found"},
+        )
 
     access_token = create_access_token(identity=user)
-    return jsonify(access_token=access_token, user_id=user.id)
+    return success_response(
+        data={"access_token": access_token, "user_id": user.id},
+    )
 
 
 @bp.route("/logout", methods=("POST",))
@@ -122,10 +143,9 @@ def logout():
         tags:
         - auth
     """
-    from flask_jwt_extended import current_user
-
-    current_app.logger.info(f"User: {current_user}")
-
     jti = get_jwt()["jti"]
     revoke_token(jti=jti)
-    return jsonify(message="JWT successfully revoked")
+
+    return success_response(
+        data={"message": "JWT successfully revoked"},
+    )

@@ -7,21 +7,12 @@ from backend.exc import LotEndedError, LotDoesNotExist
 class SignUpSchema(Schema):
     first_name = fields.Str(required=True)
     last_name = fields.Str(required=True)
-    email = fields.Str(required=True)
+    email = fields.Email(required=True)
     password = fields.Str(required=True)
 
 
-class AuthResponse(Schema):
-    user_id = fields.Int(required=True)
-    access_token = fields.Str(required=True)
-
-
-class ErrorMessageResponse(Schema):
-    message = fields.Str(required=True)
-
-
 class SignInSchema(Schema):
-    email = fields.Str(required=True)
+    email = fields.Email(required=True)
     password = fields.Str(required=True)
 
 
@@ -29,10 +20,6 @@ class AddLotSchema(Schema):
     lot_name = fields.Str(required=True)
     description = fields.Str()
     end_date = fields.DateTime(required=True)
-
-
-class LotResponse(Schema):
-    lot_id = fields.Int(required=True)
 
 
 def lot_id_validator(value: int):

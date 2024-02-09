@@ -1,4 +1,5 @@
 from typing import cast
+from backend.utils import error_response, success_response
 
 from flask import Blueprint, jsonify, request
 from marshmallow import ValidationError
@@ -21,19 +22,35 @@ def add_lot():
     post:
         summary: add lot
         requestBody:
+            required: true
             content:
-              application/json:
-                schema:
-                  AddLotSchema
+                multipart/form-data:
+                    schema:
+                        type: object
+                        properties:
+                            lot_name:
+                                type: string
+                            description:
+                                type: string
+                            end_date:
+                                type: string
+                                description: (iso, rfc, timestamp format)
+                            files:
+                                type: array
+                                items:
+                                    type: string
+                                    format: binary
         responses:
             '200':
                 content:
                     application/json:
-                        schema: LotResponse
+                        schema: CreateLotSuccessResponse
             '400':
                 content:
                     application/json:
-                        schema: ValidationError
+                        schema: CreateLotErrorResponse
+            '401':
+                description: Користувач не авторизований
         tags:
         - lots
     """
@@ -51,10 +68,9 @@ def add_lot():
             ),
         )
     except ValidationError as e:
-        return jsonify({"errors": e.messages}), 400
+        return error_response(status_code=400, errors=e.messages)
 
-    request_pictures = request.files.getlist("file")
+    request_pictures = request.files.getlist("images")
     lot_id = create_lot(request_data, request_pictures, user_id)
 
-    response = jsonify({"lot_id": lot_id})
-    return response
+    return success_response(data={"lot_id": lot_id})
