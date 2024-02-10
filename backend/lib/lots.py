@@ -4,7 +4,7 @@ from typing import Any
 from backend.models import Lot, Picture
 from backend.types import LotPayload, t
 from backend.services.db import db
-from backend.exc import LotDoesNotExist, InvalidLotID, LotEndedError
+from backend.exc import LotDoesNotExist, InvalidLotID, LotEndedError, InvalidDateError
 
 from datetime import date
 
@@ -70,11 +70,15 @@ def schema_lot_validator(value: int):
 def update_lot_data(payload: LotPayload, user_id: int, lot_id: int) -> int:
 
     if payload["end_date"].date() < date.today():
-        raise ValueError("Invalid end_date.")
-
+        raise InvalidDateError
+    
     lot = Lot.query.get(lot_id)
+
     if not lot:
         raise LotDoesNotExist
+    
+    if lot.end_date <= datetime.now():
+        raise LotEndedError
 
     if user_id != lot.author_id:
         raise PermissionError

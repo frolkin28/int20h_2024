@@ -24,9 +24,16 @@ class InvalidLotID(Exception):
 
 class LotEndedError(Exception):
     def __init__(self):
-        self.message = "Lot is ended, you can`t make a bet"
+        self.message = "Lot is ended"
         super().__init__(self.message)
 
         
 class PermissionError(Exception):
-    pass
+    def __init__(self):
+        self.message = "You don`t have permission for this"
+        super().__init__(self.message)
+
+class InvalidDateError(Exception):
+    def __init__(self):
+        self.message = "Invalid lot ended date"
+        super().__init__(self.message)
