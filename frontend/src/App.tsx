@@ -1,23 +1,48 @@
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { HomePage, LotPage } from "./pages"
+import { AuthContext } from "./AuthContext";
+import { useAuth } from "./hooks";
+import { NavbarLayout } from "./layouts";
+import { HomePage, LotPage, SignUpPage } from "./pages"
 import './App.css';
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
-    errorElement: <h1>Page not found</h1>
+    element: <NavbarLayout />,
+    errorElement: <h1>Сторінка не знайдена</h1>,
+    children: [
+      {
+        path: "/",
+        element: <HomePage />,
+      },
+      {
+        path: "/sign-in",
+        element: <h1>Sign In</h1>,
+      },
+      {
+        path: "/sign-up",
+        element: <SignUpPage />,
+      },
+      {
+        path: "/add-lot",
+        element: <h1>Add lot</h1>
+      },
+      {
+        path: "/lots/:lotId",
+        element: <LotPage />
+      }
+    ]
   },
-  {
-    path: "/lots/:lotId",
-    element: <LotPage />
-  }
 ]);
 
 const App = () => {
+  const { isSignedIn, login, logout } = useAuth()
+
   return (
-    <RouterProvider router={router} />
+    <AuthContext.Provider value={{ isSignedIn, login, logout }}>
+      <RouterProvider router={router} />
+    </AuthContext.Provider>
   )
 }
 

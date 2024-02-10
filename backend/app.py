@@ -2,6 +2,7 @@ import json
 from backend.lib.apispec import get_apispec
 from flask import Flask
 from flask_socketio import SocketIO
+from flask_cors import CORS
 
 from backend.handlers import health, auth, lots, swagger, websocket
 from backend.config import get_config
@@ -11,6 +12,7 @@ from backend.lib.auth import jwt
 
 def create_app() -> tuple[SocketIO, Flask]:
     app = Flask(__name__)
+    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     config = get_config()
     app.config.from_object(config)
 
