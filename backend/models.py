@@ -57,4 +57,4 @@ class Message(db.Model):
     content = db.Column(db.String(512), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     lot_id = db.Column(db.Integer, db.ForeignKey("lots.id"))
-    created_at = db.Column(db.DateTime, nullable=datetime.now, nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now, nullable=False)

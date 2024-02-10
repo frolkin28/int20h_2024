@@ -36,5 +36,6 @@ def create_app() -> tuple[SocketIO, Flask]:
     socketio = SocketIO(path="/ws")
     socketio.init_app(app)
     socketio.on_namespace(websocket.BetsLogNamespace("/bets"))
+    socketio.on_namespace(websocket.ChatNamespace("/chat"))
 
     return socketio, app
