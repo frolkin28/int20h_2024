@@ -28,7 +28,7 @@ class LotEndedError(Exception):
         super().__init__(self.message)
 
         
-class PermissionError(Exception):
+class UserPermissionError(Exception):
     def __init__(self):
         self.message = "You don`t have permission for this"
         super().__init__(self.message)

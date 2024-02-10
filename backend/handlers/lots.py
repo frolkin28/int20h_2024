@@ -1,7 +1,7 @@
 from typing import cast
 from backend.utils import error_response, success_response
 
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 from marshmallow import ValidationError
 from flask_jwt_extended import jwt_required, current_user
 
@@ -9,18 +9,24 @@ from backend.lib.schemas import LotSchema
 from backend.types import LotPayload
 
 from backend.lib.lots import create_lot, update_lot_data
+from backend.exc import (
+    InvalidDateError,
+    LotDoesNotExist,
+    LotEndedError,
+    UserPermissionError,
+)
 
 
 bp = Blueprint("lots", __name__, url_prefix="/api/lots")
 
 
-@bp.route("/add_lot", methods=("POST",))
+@bp.route("/", methods=("POST",))
 @jwt_required()
 def add_lot():
     """
     ---
     post:
-        summary: add lot
+        summary: Створити лот
         requestBody:
             required: true
             content:
@@ -35,7 +41,7 @@ def add_lot():
                             end_date:
                                 type: string
                                 description: (iso, rfc, timestamp format)
-                            files:
+                            images:
                                 type: array
                                 items:
                                     type: string
@@ -44,11 +50,11 @@ def add_lot():
             '200':
                 content:
                     application/json:
-                        schema: CreateLotSuccessResponse
+                        schema: UpsertLotSuccessResponse
             '400':
                 content:
                     application/json:
-                        schema: CreateLotErrorResponse
+                        schema: UpsertLotSuccessResponse
             '401':
                 description: Користувач не авторизований
         tags:
@@ -76,27 +82,35 @@ def add_lot():
     return success_response(data={"lot_id": lot_id})
 
 
-
-@bp.route("/update_lot/<int:id>", methods=("PUT",))
+@bp.route("/<int:id>", methods=("PUT",))
 @jwt_required()
 def update_lot(id):
     """
-        put:
-        summary: update lot
+    ---
+    put:
+        summary: Редагування лоту
         requestBody:
             content:
-              application/json:
-                schema:
-                  LotDataSchema
+                application/json:
+                    schema: LotSchema
         responses:
             '200':
                 content:
                     application/json:
-                        schema: LotResponse
+                        schema: UpsertLotSuccessResponse
             '400':
                 content:
                     application/json:
-                        schema: CreateLotErrorResponse
+                        schema: 
+                             oneOf:
+                                - UpsertLotErrorResponse
+                                - ErrorMessageResponse
+            '401':
+                description: Користувач не авторизований
+            '403':
+                content:
+                    application/json:
+                        schema: ErrorMessageResponse
         tags:
         - lots
     """
@@ -105,16 +119,28 @@ def update_lot(id):
     try:
         request_data = cast(
             LotPayload,
-            LotSchema().load({
-                "lot_name": request.form.get('lot_name'),
-                "description": request.form.get('description'),
-                "end_date": request.form.get('end_date'),
-            })
+            LotSchema().load(
+                {
+                    "lot_name": request.form.get("lot_name"),
+                    "description": request.form.get("description"),
+                    "end_date": request.form.get("end_date"),
+                }
+            ),
         )
     except ValidationError as e:
-        return jsonify({"errors": e.messages}), 400
-    
-    lot_id = update_lot_data(request_data, user_id, id)
+        return error_response(status_code=400, errors=e.messages)
 
-    response = jsonify({"lot_id": lot_id})
-    return response
+    try:
+        lot_id = update_lot_data(request_data, user_id, id)
+    except (InvalidDateError, LotDoesNotExist, LotEndedError) as e:
+        return error_response(
+            status_code=400,
+            errors={"message": e.message},
+        )
+    except UserPermissionError as e:
+        return error_response(
+            status_code=403,
+            errors={"message": e.message},
+        )
+
+    return success_response(data={"lot_id": lot_id})

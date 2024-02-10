@@ -33,3 +33,11 @@ class BetForDisplay(t.TypedDict):
     amount: int
     creation_date: str
     author: UserForDisplay
+
+
+class MessageForDisplay(t.TypedDict):
+    id: int
+    content: str
+    lot_id: int
+    created_at: str
+    author: UserForDisplay

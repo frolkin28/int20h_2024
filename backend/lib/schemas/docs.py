@@ -3,7 +3,7 @@ from marshmallow import Schema, fields
 from backend.lib.schemas.validation import (
     SignUpSchema,
     SignInSchema,
-    AddLotSchema,
+    LotSchema,
 )
 
 
@@ -47,13 +47,13 @@ class ErrorMessageResponse(ResponseSchema):
     errors = fields.Nested(ErrorMessageSchema)
 
 
-class LotSchema(Schema):
+class LotIdSchema(Schema):
     lot_id = fields.Int(required=True)
 
 
-class CreateLotSuccessResponse(ResponseSchema):
-    data = fields.Nested(LotSchema)
+class UpsertLotSuccessResponse(ResponseSchema):
+    data = fields.Nested(LotIdSchema)
 
 
-class CreateLotErrorResponse(ResponseSchema):
-    errors = errors_field(AddLotSchema)
+class UpsertLotErrorResponse(ResponseSchema):
+    errors = errors_field(LotSchema)
