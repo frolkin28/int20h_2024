@@ -1,54 +1,25 @@
 from marshmallow import Schema, fields, ValidationError
 
-from backend.lib.lots import lot_exists, schema_lot_validator
+from backend.lib.lots import schema_lot_validator
 from backend.exc import LotEndedError, LotDoesNotExist
 
 
 class SignUpSchema(Schema):
     first_name = fields.Str(required=True)
     last_name = fields.Str(required=True)
-    email = fields.Str(required=True)
+    email = fields.Email(required=True)
     password = fields.Str(required=True)
-
-
-class AuthResponse(Schema):
-    user_id = fields.Int(required=True)
-    access_token = fields.Str(required=True)
-
-
-class ErrorMessageResponse(Schema):
-    message = fields.Str(required=True)
 
 
 class SignInSchema(Schema):
-    email = fields.Str(required=True)
+    email = fields.Email(required=True)
     password = fields.Str(required=True)
 
 
-class AddLotSchema(Schema):
+class LotSchema(Schema):
     lot_name = fields.Str(required=True)
     description = fields.Str()
     end_date = fields.DateTime(required=True)
-
-
-class LotResponse(Schema):
-    lot_id = fields.Int(required=True)
-
-
-class CustomDateTimeField(fields.Field):
-    def _serialize(self, value, *args, **kwargs) -> str | None:
-        if value is None:
-            return None
-        return value.strftime("%Y-%m-%d %H:%M:%S")
-
-
-class BetResponseSchema(Schema):
-    id = fields.Int(required=True)
-    amount = fields.Int(required=True)
-    creation_date = CustomDateTimeField(
-        attribute="creation_date",
-        required=True,
-    )
 
 
 def lot_id_validator(value: int):

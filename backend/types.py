@@ -1,5 +1,4 @@
 import typing as t
-from dataclasses import dataclass
 
 from datetime import datetime
 
@@ -15,8 +14,7 @@ class SignInPayload(t.TypedDict):
     email: str
     password: str
 
-
-class AddLotPayload(t.TypedDict):
+class LotPayload(t.TypedDict):
     lot_name: str
     description: str
     end_date: datetime
@@ -34,4 +32,12 @@ class BetForDisplay(t.TypedDict):
     lot_id: int
     amount: int
     creation_date: str
+    author: UserForDisplay
+
+
+class MessageForDisplay(t.TypedDict):
+    id: int
+    content: str
+    lot_id: int
+    created_at: str
     author: UserForDisplay

@@ -7,6 +7,7 @@ from flask_cors import CORS
 from backend.handlers import health, auth, lots, swagger, websocket
 from backend.config import get_config
 from backend.services.db import db, migrate
+from backend.services.aws import configure_aws
 from backend.lib.auth import jwt
 
 
@@ -23,6 +24,9 @@ def create_app() -> tuple[SocketIO, Flask]:
     db.init_app(app)
     migrate.init_app(app, db)
 
+    configure_aws(config)
+    app.logger.info("AWS service configured")
+
     jwt.init_app(app)
 
     @app.route("/swagger")
@@ -34,5 +38,6 @@ def create_app() -> tuple[SocketIO, Flask]:
     socketio = SocketIO(path="/ws")
     socketio.init_app(app)
     socketio.on_namespace(websocket.BetsLogNamespace("/bets"))
+    socketio.on_namespace(websocket.ChatNamespace("/chat"))
 
     return socketio, app

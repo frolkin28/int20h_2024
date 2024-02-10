@@ -1,25 +1,23 @@
 from datetime import datetime
 from backend.models import Bet, User
 from backend.services.db import db
-from backend.lib.schemas import BetResponseSchema
 from backend.types import BetForDisplay, UserForDisplay
 
 
 def get_bets_for_display(lot_id: int) -> list[BetForDisplay]:
     # TODO: (frolkin28) add pagination here, after testing
 
-    user_alias = db.aliased(User)
     query = (
-        db.session.query(
+        Bet.query.join(User, Bet.user_id == User.id)
+        .with_entities(
             Bet.id,
             Bet.amount,
             Bet.creation_date,
-            user_alias.id.label("user_id"),
-            user_alias.email.label("user_email"),
-            user_alias.first_name.label("user_first_name"),
-            user_alias.last_name.label("user_last_name"),
+            User.id.label("user_id"),
+            User.email.label("user_email"),
+            User.first_name.label("user_first_name"),
+            User.last_name.label("user_last_name"),
         )
-        .join(User, Bet.user_id == User.id)
         .filter(Bet.lot_id == lot_id)
     )
     return [

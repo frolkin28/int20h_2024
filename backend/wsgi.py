@@ -2,8 +2,12 @@
 
 import logging
 
+from dotenv import load_dotenv
+
 from backend.app import create_app
 
+
+load_dotenv()
 
 socket, app = create_app()
 
