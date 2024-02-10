@@ -1,5 +1,4 @@
 import boto3
-from flask import current_app
 
 from backend.config import Config
 
