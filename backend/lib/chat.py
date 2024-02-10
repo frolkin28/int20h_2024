@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from backend.models import Message, User
 from backend.services.db import db
@@ -6,6 +7,14 @@ from backend.types import MessageForDisplay, UserForDisplay
 
 
 RECENT_MESSAGES_AMOUNT = 20
+
+MESSAGE_LEN = 512
+
+
+def validate_message(value: Any) -> str | None:
+    if isinstance(value, str) and len(value) > 0 and len(value) <= MESSAGE_LEN:
+        return value
+    return None
 
 
 def create_message(user_id: int, lot_id: int, message: str) -> Message:

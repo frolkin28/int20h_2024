@@ -17,6 +17,7 @@ from backend.lib.chat import (
     serialize_messages,
     create_message,
     serialize_new_message,
+    validate_message,
 )
 from backend.lib.lots import validate_lot_id
 from backend.lib.websocket import AuctionEvents, ChatEvents, BaseEvents
@@ -127,11 +128,11 @@ class ChatNamespace(BaseNamespace):
                 e.message,
             )
             return
-        message = data.get("message")
+        message = validate_message(data.get("message"))
         if not message:
             self.emit_message(
                 BaseEvents.VALIDATION_ERROR,
-                {"message": "Empty message is not allowed"},
+                {"message": "Empty message is invalid"},
             )
             return
 
