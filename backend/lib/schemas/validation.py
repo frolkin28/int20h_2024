@@ -16,7 +16,7 @@ class SignInSchema(Schema):
     password = fields.Str(required=True)
 
 
-class AddLotSchema(Schema):
+class LotSchema(Schema):
     lot_name = fields.Str(required=True)
     description = fields.Str()
     end_date = fields.DateTime(required=True)
