@@ -6,9 +6,9 @@ from backend.lib.schemas.validation import (
 )
 from backend.lib.schemas.docs import (
     ErrorMessageResponse,
-    CreateLotSuccessResponse,
+    UpsertLotErrorResponse,
     SignInErrorResponse,
     SignUpErrorResponse,
-    CreateLotErrorResponse,
+    UpsertLotSuccessResponse,
     AuthSuccessResponse,
 )
