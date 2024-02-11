@@ -41,6 +41,8 @@ def add_lot():
                             end_date:
                                 type: string
                                 description: (iso, rfc, timestamp format)
+                            start_price:
+                                type: float 
                             images:
                                 type: array
                                 items:

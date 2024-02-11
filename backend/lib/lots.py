@@ -138,10 +138,13 @@ def get_lot_data(id: int) -> dict:
     else:
         picture_urls = []
 
+    start_price = lot.start_price/100 if lot.start_price else None
+
     if lot:
         lot_payload: FullLotPayload = {
                 "lot_name": lot.lot_name,
                 "description": lot.description,
+                "start_price": start_price,
                 "author": {
                     "email": author.email,
                     "first_name": author.first_name,
