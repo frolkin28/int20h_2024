@@ -184,7 +184,7 @@ def lot_data(id):
     return success_response(data={"lot_data": lot_data})
 
 
-@bp.route("/main_page", methods=("GET",))
+@bp.route("/", methods=("GET",))
 def main_page():
     """
     ---
