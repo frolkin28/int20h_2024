@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { TextInput, Button } from "../";
 import { AuthContext } from "../../AuthContext";
+import styles from './SingInForm.module.css';
 
 export const SignInForm = () => {
   const navigate = useNavigate();
@@ -40,13 +41,13 @@ export const SignInForm = () => {
   }
 
   return (
-    <form>
+    <form className={styles["form-container"]}>
       <div>
-        <label htmlFor="email">Email</label>
+        <label className={styles["form-label"]} htmlFor="email">Email</label>
         <TextInput id="email" value={email} onChange={handleEmailChange} />
       </div>
       <div>
-        <label htmlFor="password">Пароль</label>
+        <label className={styles["form-label"]}  htmlFor="password">Пароль</label>
         <TextInput id="password" type="password" value={password} onChange={handlePasswordChange} />
       </div>
       <Button text="Авторизуватись" onClick={handleSubmit} disabled={isSubmitting} />

@@ -3,7 +3,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
 import { TextInput, Checkbox, Button } from "../";
-import styles from './SignUpForm.module.css';
+import styles from './SingUpForm.module.css';
 
 export const SignUpForm = () => {
   const navigate = useNavigate();
