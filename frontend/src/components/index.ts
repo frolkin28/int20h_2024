@@ -1,6 +1,10 @@
 export { Navbar } from "./Navbar/Navbar";
 export { TextInput } from "./Input/TextInput"
+export { TextArea } from "./Input/TextArea"
 export { Checkbox } from "./Checkbox/Checkbox"
+export { FileInput } from "./Input/FileInput"
+export { DateTimeInput } from "./Input/DateTimeInput"
 export { SignUpForm } from "./Forms/SignUpForm"
 export { SignInForm } from "./Forms/SignInForm"
+export { AddLotForm } from "./Forms/AddLotForm"
 export { Button } from "./Buttons/Button"

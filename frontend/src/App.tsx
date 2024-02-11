@@ -7,10 +7,10 @@ import './App.css';
 
 
 const App = () => {
-  const { isSignedIn, login, logout } = useAuth()
+  const { token, isSignedIn, login, logout } = useAuth()
 
   return (
-    <AuthContext.Provider value={{ isSignedIn, login, logout }}>
+    <AuthContext.Provider value={{ token, isSignedIn, login, logout }}>
       <RouterProvider router={router} />
     </AuthContext.Provider>
   )

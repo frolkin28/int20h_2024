@@ -3,10 +3,12 @@ import { useState, useEffect } from "react";
 const ACCESS_TOKEN_KEY = "access_token"
 
 export const useAuth = () => {
+  const [token, setToken] = useState<string | null>(null);
   const [isSignedIn, setSignedIn] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem(ACCESS_TOKEN_KEY)
+    setToken(token);
     setSignedIn(!!token)
   }, [])
 
@@ -17,8 +19,9 @@ export const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY)
+    setToken(null);
     setSignedIn(false)
   }
 
-  return { isSignedIn, login, logout}
+  return { token, isSignedIn, login, logout}
 }
