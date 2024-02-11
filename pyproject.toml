@@ -31,3 +31,8 @@ requires-python = ">=3.11"
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
+
+[tool.pdm.dev-dependencies]
+test = [
+    "pytest>=8.0.0",
+]

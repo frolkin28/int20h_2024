@@ -27,13 +27,20 @@ class LotEndedError(Exception):
         self.message = "Lot is ended"
         super().__init__(self.message)
 
-        
+
 class UserPermissionError(Exception):
     def __init__(self):
         self.message = "You don`t have permission for this"
         super().__init__(self.message)
 
+
 class InvalidDateError(Exception):
     def __init__(self):
         self.message = "Invalid lot ended date"
+        super().__init__(self.message)
+
+
+class HigherBetExistsError(Exception):
+    def __init__(self):
+        self.message = "Ви не можете поставити нижчу ставку за поточну"
         super().__init__(self.message)

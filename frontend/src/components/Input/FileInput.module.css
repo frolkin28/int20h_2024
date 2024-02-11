@@ -1,0 +1,11 @@
+.FileInputContainer {
+    display: flex; 
+  }
+  .FileInput {
+    margin: 10px;
+    position: relative; 
+    cursor: pointer; 
+    height: 100px;
+    background-color: rgb(177, 177, 177);
+  }
+  

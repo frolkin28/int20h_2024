@@ -66,7 +66,7 @@ export const AddLotForm = () => {
     <div>
       <form className={formStyles.formContainer}>
         <div className={formStyles.inputBlock}>
-          <label htmlFor="lot-name">Назва лоту</label>
+          <label className={formStyles.formLabel} htmlFor="lot-name">Назва лоту</label>
           <TextInput
             id="lot-name"
             value={lotName}
@@ -74,7 +74,7 @@ export const AddLotForm = () => {
           />
         </div>
         <div className={formStyles.inputBlock}>
-          <label htmlFor="lot-description">Опис</label>
+          <label className={formStyles.formLabel} htmlFor="lot-description">Опис</label>
           <TextArea
             id="lot-description"
             value={description}
@@ -82,7 +82,7 @@ export const AddLotForm = () => {
           />
         </div>
         <div className={formStyles.inputBlock}>
-          <label htmlFor="end-date">Дата закінчення аукціону</label>
+          <label className={formStyles.formLabel} htmlFor="end-date">Дата закінчення аукціону</label>
           <DateTimeInput
             id="end-date"
             onChange={handleEndDateChange}

@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import styles from './DateTimeInput.module.css'
 
 interface DateTimeInputProps {
   id: string
@@ -13,6 +14,6 @@ export const DateTimeInput = (props: DateTimeInputProps) => {
   }
 
   return (
-    <input type="datetime-local" id={id} onChange={handleChange} />
+    <input className={styles["DateTimeInput"]} type="datetime-local" id={id} onChange={handleChange} />
   )
 }

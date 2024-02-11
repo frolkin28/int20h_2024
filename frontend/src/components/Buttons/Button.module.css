@@ -6,6 +6,8 @@
     font-size: 24px;
     font-weight: 400;
     color: #000;
+    position: relative;
+    align-items: center;
 }
 
 .my-button:disabled {
