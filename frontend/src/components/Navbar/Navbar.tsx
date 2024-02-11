@@ -38,7 +38,7 @@ export const Navbar = () => {
       <Link to="/" className={styles["link-logo"]}><p className={styles["logo"]}>charity auction</p></Link>
       <ul className={styles['buttons-list']}>
         <li>
-          <Link className={styles["add-lot"]} to={isSignedIn ? "add-lot" : "sign-in"} >Додати</Link>
+          <Link className={styles["add-lot"]} to={isSignedIn ? "/add-lot" : "/sign-in"} >Додати</Link>
         </li>
         {renderLinks()}
       </ul>
