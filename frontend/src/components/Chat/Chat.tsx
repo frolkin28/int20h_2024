@@ -3,6 +3,8 @@ import { Button } from "../Buttons/Button";
 import { TextInput } from "../Input/TextInput";
 import { useChat } from "../../hooks/useChat";
 import { AuthContext } from "../../AuthContext";
+import styles from "./Chat.module.css"
+import sharedStyles from "../../App.module.css"
 
 export const Chat = ({ lotId }: { lotId: number }) => {
   const [inputMessage, setInputMessage] = useState<string>("");
@@ -23,21 +25,24 @@ export const Chat = ({ lotId }: { lotId: number }) => {
   };
 
   const handleSendMessage = () => {
-    if (inputMessage.trim() !== "") {
-      createMessage(inputMessage);
-      setInputMessage("");
-    } else {
-      alert("Невалідне повідомлення");
+    if (!isSignedIn) {
+      return alert("Необхідно авторизуватися")
     }
+
+    const message = inputMessage?.trim()
+
+    if(!message || message === "") {
+      return alert("Введіть повідомлення")
+    }
+
+    createMessage(inputMessage);
+    setInputMessage("");
   };
 
   return (
-    <div>
-      <h3>Чат аукціону</h3>
-      <div
-        style={{ height: "300px", overflowY: "auto" }}
-        ref={chatContainerRef}
-      >
+    <div className={sharedStyles.card}>
+      <h3 className={sharedStyles.withoutMargin}>Чат аукціону</h3>
+      <div className={styles.chatWrapper} ref={chatContainerRef}>
         {messages.map((message) => (
           <div key={message.id}>
             <div>
@@ -63,12 +68,9 @@ export const Chat = ({ lotId }: { lotId: number }) => {
         />
         <Button
           onClick={handleSendMessage}
-          disabled={!(isSignedIn && inputMessage)}
-          text={isSignedIn ? "Відправити" : "Необхідно авторизуватись"}
+          text="Відправити"
         />
       </div>
     </div>
   );
 };
-
-export default Chat;

@@ -7,6 +7,6 @@ export { DateTimeInput } from "./Input/DateTimeInput"
 export { SignUpForm } from "./Forms/SignUpForm"
 export { SignInForm } from "./Forms/SignInForm"
 export { AddLotForm } from "./Forms/AddLotForm"
-export { BetsList } from "./BetsList";
+export { BetsList } from "./BetsList/BetsList";
 export { Button } from "./Buttons/Button"
-export { Chat } from "./Chat";
+export { Chat } from "./Chat/Chat";

@@ -16,7 +16,7 @@ export const BetItem: React.FC<BetListItemProps> = ({ bet }) => {
             {author.first_name} {author.last_name}
           </strong>
         </span>
-        <span className="bet-author-email">{author.email}</span>
+        <span> ({author.email})</span>
         <p>
           Сума: {amount} грн. ({creation_date})
         </p>

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuction, useAuth } from "../../hooks";
 import { BetItem } from "./views/BetItem";
+import sharedStyles from "../../App.module.css"
 
 interface BetsListProps {
   lotId: number;
@@ -13,29 +14,37 @@ export const BetsList = ({ lotId }: BetsListProps) => {
 
   const handleMakeBet = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newBetAmount.trim() !== "") {
-      const bet = parseFloat(newBetAmount);
-      if (bet) {
-        makeBet(bet);
-        setNewBetAmount("");
-      } else {
-        alert("Це невалідна сума");
-      }
+
+    if (!isSignedIn) {
+      return alert("Необхідно авторизуватись")
+    }
+
+    const amount = newBetAmount?.trim()
+
+    if (!amount || amount === "") {
+      return alert("Введіть суму")
+    }
+
+    const bet = parseFloat(newBetAmount);
+    if (bet) {
+      makeBet(bet);
+      setNewBetAmount("");
+    } else {
+      alert("Це невалідна сума");
     }
   };
 
   return (
-    <div>
+    <div className={sharedStyles.card}>
       <div>
-        <h3>Поточні ставки</h3>
+        <h3 className={sharedStyles.withoutMargin}>Поточні ставки</h3>
       </div>
       <div>
-        <ul>
+        <ul className={sharedStyles.scrollableContainer}>
           {bets.map((bet) => (
             <BetItem key={bet.id} bet={bet} />
           ))}
         </ul>
-
         <form onSubmit={handleMakeBet}>
           <label>
             Зробити ставку (грн):
@@ -47,8 +56,8 @@ export const BetsList = ({ lotId }: BetsListProps) => {
             />
           </label>
 
-          <button type="submit" disabled={!(isSignedIn && newBetAmount)}>
-            {isSignedIn ? "Підняти" : "Необхідно авторизуватись"}
+          <button type="submit">
+            Підняти
           </button>
         </form>
       </div>

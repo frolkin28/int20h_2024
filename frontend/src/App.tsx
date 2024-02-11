@@ -2,7 +2,6 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./Router";
 import { AuthContext } from "./AuthContext";
 import { useAuth } from "./hooks";
-import "./App.css";
 
 const App = () => {
   const { token, isSignedIn, login, logout } = useAuth();
