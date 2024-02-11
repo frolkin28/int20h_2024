@@ -31,6 +31,7 @@ class FullLotPayload(t.TypedDict):
 
 class ListLotPayload(t.TypedDict):
     lot_name: str
+    lot_id: int
     end_date: datetime
     picture: str
     price: float

@@ -167,8 +167,9 @@ def main_page_data(page: int, per_page: int) -> list:
         picture_url = picture.url if picture else None
         price_lot = price / 100 if price else None
 
-        load_data = {
+        load_data: ListLotPayload = {
             "lot_name": lot.lot_name,
+            "lot_id": lot.id,
             "end_date": lot.end_date,
             "picture": picture_url,
             "price": price_lot

@@ -37,6 +37,7 @@ class FullLotSchema(Schema):
 
 class ListLotSchema(Schema):
     lot_name = fields.Str(required=True)
+    lot_id = fields.Int(required=True)
     end_date = fields.DateTime(required=True)
     picture = fields.Str()
     price = fields.Float()
