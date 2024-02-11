@@ -27,6 +27,7 @@ export interface Lot {
   pictures: string[];
   end_date: string;
   creation_date: string;
+  start_price: number;
   author: User;
 }
 

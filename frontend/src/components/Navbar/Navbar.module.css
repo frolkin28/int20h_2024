@@ -1,6 +1,10 @@
 .link-logo {
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
   }
+
 .logo{
 background-clip: text;
 background: linear-gradient(180deg, rgba(0, 41, 255, 0.99) 0%, #ffd600 100%);
