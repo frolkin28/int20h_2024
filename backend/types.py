@@ -29,6 +29,13 @@ class FullLotPayload(t.TypedDict):
     pictures: list[str]
 
 
+class ListLotPayload(t.TypedDict):
+    lot_name: str
+    lot_id: int
+    end_date: datetime
+    picture: str
+    price: float
+
 class UserForDisplay(t.TypedDict):
     id: int
     email: str

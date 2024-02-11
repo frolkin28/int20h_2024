@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import Any
 from sqlalchemy.orm import joinedload
 from flask import current_app
+from sqlalchemy import desc
+
 
 from werkzeug.datastructures import FileStorage
 
@@ -9,8 +11,8 @@ from werkzeug.datastructures import FileStorage
 import boto3
 from botocore.exceptions import ClientError
 
-from backend.models import Lot, Picture, User
-from backend.types import LotPayload, FullLotPayload, t
+from backend.models import Lot, Picture, User, Bet
+from backend.types import LotPayload, FullLotPayload, ListLotPayload, t
 from backend.services.db import db
 from backend.exc import (
     LotDoesNotExist,
@@ -151,5 +153,25 @@ def get_lot_data(id: int) -> dict:
         return None
 
 
+def main_page_data(page: int, per_page: int) -> list:
+    data = []
 
+    lots = Lot.query.paginate(page, per_page, error_out=False)
+    for lot in lots.items:
+        picture = Picture.query.filter(Picture.lot_id == lot.id).first()
+        biggest_bet = Bet.query.filter(Bet.lot_id == lot.id).order_by(desc(Bet.amount)).first()
+        price = float(biggest_bet.amount) if biggest_bet else None
+        
+        picture_url = picture.url if picture else None
+        price_lot = price / 100 if price else None
+
+        load_data: ListLotPayload = {
+            "lot_name": lot.lot_name,
+            "lot_id": lot.id,
+            "end_date": lot.end_date,
+            "picture": picture_url,
+            "price": price_lot
+        }
+        data.append(load_data)
+    return data
 
