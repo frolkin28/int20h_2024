@@ -31,6 +31,7 @@ class LotPayload(t.TypedDict):
 class FullLotPayload(t.TypedDict):
     lot_name: str
     description: str
+    start_price: float
     author: dict[str, str, str]
     creation_date: datetime
     end_date: datetime
