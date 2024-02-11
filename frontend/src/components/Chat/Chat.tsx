@@ -4,6 +4,7 @@ import { TextInput } from "../Input/TextInput";
 import { useChat } from "../../hooks/useChat";
 import { AuthContext } from "../../AuthContext";
 import styles from "./Chat.module.css"
+import sharedStyles from "../../App.module.css"
 
 export const Chat = ({ lotId }: { lotId: number }) => {
   const [inputMessage, setInputMessage] = useState<string>("");
@@ -39,8 +40,8 @@ export const Chat = ({ lotId }: { lotId: number }) => {
   };
 
   return (
-    <div>
-      <h3>Чат аукціону</h3>
+    <div className={sharedStyles.card}>
+      <h3 className={sharedStyles.withoutMargin}>Чат аукціону</h3>
       <div className={styles.chatWrapper} ref={chatContainerRef}>
         {messages.map((message) => (
           <div key={message.id}>
@@ -73,5 +74,3 @@ export const Chat = ({ lotId }: { lotId: number }) => {
     </div>
   );
 };
-
-export default Chat;

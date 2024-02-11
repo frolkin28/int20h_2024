@@ -1,6 +1,8 @@
 .container {
+    margin-top: 20px;
     display: flex;
     column-gap: 70px;
+    align-items: flex-start;
 }
 
 .rightColumn {

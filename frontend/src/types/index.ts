@@ -29,3 +29,12 @@ export interface Lot {
   creation_date: string;
   author: User;
 }
+
+export interface LotPreview {
+  lot_id: number;
+  lot_name: string;
+  description: string;
+  picture: string;
+  end_date: string;
+  price: number;
+}

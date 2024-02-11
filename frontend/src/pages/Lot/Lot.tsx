@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { BetsList, Chat } from "../../components";
 import { Lot } from "../../types"
 import styles from "./Lot.module.css"
+import sharedStyles from "../../App.module.css"
 
 export const LotPage = () => {
   const { lotId } = useParams<{ lotId: string }>();
@@ -31,7 +32,7 @@ export const LotPage = () => {
 
   return (
     <div className={styles.container}>
-      <div>
+      <div className={sharedStyles.card}>
         <h1>{lot.lot_name}</h1>
         <p>{lot.description}</p>
         <p>

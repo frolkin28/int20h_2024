@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuction, useAuth } from "../../hooks";
 import { BetItem } from "./views/BetItem";
+import sharedStyles from "../../App.module.css"
 
 interface BetsListProps {
   lotId: number;
@@ -34,17 +35,16 @@ export const BetsList = ({ lotId }: BetsListProps) => {
   };
 
   return (
-    <div>
+    <div className={sharedStyles.card}>
       <div>
-        <h3>Поточні ставки</h3>
+        <h3 className={sharedStyles.withoutMargin}>Поточні ставки</h3>
       </div>
       <div>
-        <ul>
+        <ul className={sharedStyles.scrollableContainer}>
           {bets.map((bet) => (
             <BetItem key={bet.id} bet={bet} />
           ))}
         </ul>
-
         <form onSubmit={handleMakeBet}>
           <label>
             Зробити ставку:

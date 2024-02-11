@@ -1,0 +1,13 @@
+.listWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    width: 900px;
+    gap: 30px;
+}
+
+.lotContainer {
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+}
