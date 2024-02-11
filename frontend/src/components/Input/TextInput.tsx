@@ -1,4 +1,5 @@
 import React, { useState, ChangeEvent } from "react";
+import styles from "./TextInput.module.css";
 
 interface TextInputProps {
   id: string
@@ -6,6 +7,7 @@ interface TextInputProps {
   onChange: (value: string) => void
   placeholder?: string
   type?: "text" | "password"
+  className?: string;
 }
 
 export const TextInput = (props: TextInputProps) => {
@@ -22,6 +24,7 @@ export const TextInput = (props: TextInputProps) => {
       value={value}
       onChange={handleChange}
       placeholder={placeholder}
+      className={styles["form-input"]}
     />
   )
 }
