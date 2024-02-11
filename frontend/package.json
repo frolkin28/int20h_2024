@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "REACT_APP_BASE_URL=http://localhost:8080 react-scripts start",
-    "build": "react-scripts build",
+    "build": "REACT_APP_BASE_URL=https://int20h-2024-aged-butterfly-826.fly.dev react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
