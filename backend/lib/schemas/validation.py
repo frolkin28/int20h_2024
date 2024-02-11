@@ -22,6 +22,13 @@ class LotSchema(Schema):
     end_date = fields.DateTime(required=True)
 
 
+class LotCreationSchema(Schema):
+    lot_name = fields.Str(required=True)
+    description = fields.Str()
+    end_date = fields.DateTime(required=True)
+    start_price = fields.Float()
+
+
 class FullLotSchema(Schema):
     lot_name = fields.Str(required=True)
     description = fields.Str()

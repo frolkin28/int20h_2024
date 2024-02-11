@@ -13,8 +13,10 @@ from backend.lib.schemas import (
     UpsertLotErrorResponse,
     AuthSuccessResponse,
     LotSchema,
+    LotCreationSchema,
     FullLotSchema,
     ListLotSchema,
+    
 )
 
 
@@ -59,6 +61,7 @@ def get_apispec(app: Flask) -> APISpec:
     spec.components.schema("SignUpErrorResponse", schema=SignUpErrorResponse)
     spec.components.schema("UpsertLotErrorResponse", schema=UpsertLotErrorResponse)
     spec.components.schema("LotSchema", schema=LotSchema)
+    spec.components.schema("LotCreationSchema", schema=LotCreationSchema)
     spec.components.schema("FullLotSchema", schema=FullLotSchema)
     spec.components.schema("ListLotSchema", schema=ListLotSchema)
 

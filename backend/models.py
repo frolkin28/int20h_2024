@@ -22,6 +22,7 @@ class Lot(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     creation_date = db.Column(db.DateTime)
     end_date = db.Column(db.DateTime)
+    start_price = db.Column(db.Integer)
 
 
 class Bet(db.Model):

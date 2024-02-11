@@ -2,6 +2,7 @@ from backend.lib.schemas.validation import (
     SignUpSchema,
     SignInSchema,
     LotSchema,
+    LotCreationSchema,
     FullLotSchema,
     ListLotSchema,
     BetCreationSchema,

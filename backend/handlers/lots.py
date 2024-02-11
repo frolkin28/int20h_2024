@@ -5,8 +5,8 @@ from flask import Blueprint, request
 from marshmallow import ValidationError
 from flask_jwt_extended import jwt_required, current_user
 
-from backend.lib.schemas import LotSchema, FullLotSchema, ListLotSchema
-from backend.types import LotPayload, FullLotPayload, ListLotPayload
+from backend.lib.schemas import LotSchema, LotCreationSchema, FullLotSchema, ListLotSchema
+from backend.types import LotCreationLoad, LotPayload
 
 from backend.lib.lots import create_lot, update_lot_data, get_lot_data, main_page_data
 from backend.exc import (
@@ -64,12 +64,13 @@ def add_lot():
 
     try:
         request_data = cast(
-            LotPayload,
-            LotSchema().load(
+            LotCreationLoad,
+            LotCreationSchema().load(
                 {
                     "lot_name": request.form.get("lot_name"),
                     "description": request.form.get("description"),
                     "end_date": request.form.get("end_date"),
+                    "start_price": request.form.get("start_price"),
                 }
             ),
         )
