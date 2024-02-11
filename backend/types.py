@@ -14,6 +14,7 @@ class SignInPayload(t.TypedDict):
     email: str
     password: str
 
+
 class LotPayload(t.TypedDict):
     lot_name: str
     description: str
@@ -23,7 +24,7 @@ class LotPayload(t.TypedDict):
 class FullLotPayload(t.TypedDict):
     lot_name: str
     description: str
-    author: dict[str, str, str]  
+    author: dict[str, str, str]
     creation_date: datetime
     end_date: datetime
     pictures: list[str]
@@ -46,7 +47,7 @@ class UserForDisplay(t.TypedDict):
 class BetForDisplay(t.TypedDict):
     id: int
     lot_id: int
-    amount: int
+    amount: str
     creation_date: str
     author: UserForDisplay
 

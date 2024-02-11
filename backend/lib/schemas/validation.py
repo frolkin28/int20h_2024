@@ -1,4 +1,4 @@
-from marshmallow import Schema, fields, ValidationError
+from marshmallow import Schema, fields, ValidationError, validate
 
 from backend.lib.lots import schema_lot_validator
 from backend.exc import LotEndedError, LotDoesNotExist
@@ -28,7 +28,7 @@ class FullLotSchema(Schema):
     author = {
         "email": fields.Str(required=True),
         "first_name": fields.Str(required=True),
-        "last_name": fields.DateTime(required=True)
+        "last_name": fields.DateTime(required=True),
     }
     creation_date = fields.DateTime(required=True)
     end_date = fields.DateTime(required=True)
@@ -50,11 +50,12 @@ def lot_id_validator(value: int):
         raise ValidationError(e.message)
 
 
-def amount_validator(value: int):
-    if value < 0:
-        raise ValidationError("Invalid bet amount")
-
-
 class BetCreationSchema(Schema):
     lot_id = fields.Int(required=True, validate=lot_id_validator)
-    amount = fields.Int(required=True, validate=amount_validator)
+    amount = fields.Decimal(
+        required=True,
+        validate=[
+            validate.Range(min=0, error="Ставка не може бути менше 0"),
+        ],
+        places=2,
+    )

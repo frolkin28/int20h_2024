@@ -10,7 +10,7 @@ from backend.lib.bets import (
     create_bet,
     serialize_new_bet,
 )
-from backend.exc import LotDoesNotExist, InvalidLotID
+from backend.exc import HigherBetExistsError, LotDoesNotExist, InvalidLotID
 from backend.lib.auth import verify_user_token
 from backend.lib.chat import (
     get_recent_messages,
@@ -82,11 +82,21 @@ class BetsLogNamespace(BaseNamespace):
             )
             return
 
-        bet = create_bet(
-            user_id=user.id,
-            lot_id=bet_data["lot_id"],
-            amount=bet_data["amount"],
-        )
+        try:
+            bet = create_bet(
+                user_id=user.id,
+                lot_id=bet_data["lot_id"],
+                amount=bet_data["amount"],
+            )
+        except HigherBetExistsError as err:
+            self.emit_message(
+                BaseEvents.VALIDATION_ERROR,
+                err.message,
+            )
+            return
+        except Exception as e:
+            current_app.logger.exception(e)
+            return
 
         self.emit_message(AuctionEvents.BET_CREATION_SUCCESS, "Bet accepted")
         self.emit(
