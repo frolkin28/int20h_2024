@@ -1,3 +1,26 @@
+.link-logo {
+    text-decoration: none;
+  }
+.logo{
+background-clip: text;
+background: linear-gradient(180deg, rgba(0, 41, 255, 0.99) 0%, #ffd600 100%);
+font-family: "Lohit Tamil", sans-serif;
+font-size: 40px;
+font-weight: 400;
+font-weight: bold;
+-webkit-background-clip: text;
+-webkit-text-fill-color: transparent;
+-webkit-text-stroke: 1px black;
+}
+
+.add-lot{
+    color: black;
+    background: #ffd600;
+    border-radius: 5px;
+    text-decoration: none; 
+    font-size: 20px;
+}
+
 ul {
     list-style-type: none;
 }

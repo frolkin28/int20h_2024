@@ -181,4 +181,6 @@ def lot_data(id):
             errors={"message": e.message},
         )
 
+
     return success_response(data={"lot_data": lot_data})
+

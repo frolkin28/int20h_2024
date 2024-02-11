@@ -3,6 +3,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
 import { TextInput, Checkbox, Button } from "../";
+import styles from './SignUpForm.module.css';
 
 export const SignUpForm = () => {
   const navigate = useNavigate();
@@ -58,25 +59,25 @@ export const SignUpForm = () => {
   }
 
   return (
-    <form>
-      <div>
-        <label htmlFor="email">Email</label>
+    <form className={styles["form-container"]}>
+      <div >
+        <label className={styles["form-label"]} htmlFor="email">Email</label>
         <TextInput id="email" value={email} onChange={handleEmailChange} />
       </div>
       <div>
-        <label htmlFor="first-name">Імʼя</label>
+        <label className={styles["form-label"]} htmlFor="first-name">Імʼя</label>
         <TextInput id="first-name" value={firstName} onChange={handleFirstNameChange} />
       </div>
       <div>
-        <label htmlFor="last-name">Прізвище</label>
+        <label className={styles["form-label"]} htmlFor="last-name">Прізвище</label>
         <TextInput id="last-name" value={lastName} onChange={handleLastNameChange} />
       </div>
       <div>
-        <label htmlFor="password">Пароль</label>
+        <label className={styles["form-label"]} htmlFor="password">Пароль</label>
         <TextInput id="password" type="password" value={password} onChange={handlePasswordChange} />
       </div>
       <div>
-        <label htmlFor="password-repeat">Повторіть пароль</label>
+        <label className={styles["form-label"]} htmlFor="password-repeat">Повторіть пароль</label>
         <TextInput id="password-repeat" type="password" value={passwordRepeat} onChange={handlePasswordRepeatChange} />
       </div>
       <div>
