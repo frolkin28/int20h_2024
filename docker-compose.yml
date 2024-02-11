@@ -17,7 +17,7 @@ services:
       - ./migrations:/app/migrations
       - ./.env:/app/.env
 
-  postgres-base: &postgres-base
+  postgres-base: &database-base
     image: postgres:16.0
     environment:
       POSTGRES_DB: int20h
@@ -26,8 +26,8 @@ services:
       PGDATA: /var/lib/postgresql/data
       TZ: "Europe/Kiev"
 
-  postgres-dev:
-    <<: *postgres-base
+  postgres:
+    <<: *database-base
     command: -p 5432
     ports:
       - "5432:5432"
@@ -35,7 +35,7 @@ services:
       - int20h-postgres-data:/var/lib/postgresql/data
 
   postgres-test:
-    <<: *postgres-base
+    <<: *database-base
     command: -p 5433
     ports:
       - "5433:5433"
@@ -47,6 +47,19 @@ services:
       - "8080:8080"
     depends_on:
       - postgres
+
+  tests:
+    <<: *base-dev
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: test
+    command: pdm run pytest backend/tests
+    environment:
+     aws_access_key_id: test_key_id
+     aws_secret_access_key: test_access_key
+    depends_on:
+      - postgres-test
 
   shell:
     <<: *base-dev

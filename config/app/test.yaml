@@ -1,0 +1,7 @@
+debug: false
+
+sqlalchemy_database_uri: postgresql+psycopg2://postgres:postgres@postgres-test:5433/int20h
+jwt_secret_key: test123
+secret_key: test321
+jwt_access_token_expires: 30
+aws_s3_domain: dummy.com
