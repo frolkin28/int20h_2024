@@ -33,6 +33,7 @@ class FullLotSchema(Schema):
     lot_name = fields.Str(required=True)
     description = fields.Str()
     start_price = fields.Float()
+    is_author = fields.Bool(required=True)
     author = {
         "email": fields.Str(required=True),
         "first_name": fields.Str(required=True),

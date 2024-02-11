@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { LotPreview } from "../../types";
@@ -23,15 +23,19 @@ export const HomePage = () => {
   }, [page])
 
   const renderedLots = lots.map((lot) => (
-    <div className={`${styles.lotContainer} ${sharedStyles.card}`} onClick={() => navigate(`/lots/${lot.lot_id}`)}>
-      {lot.picture ? <img src={lot.picture} width={"230px"} alt=""/> : null}
+    <div
+      key={lot.lot_id}
+      className={`${styles.lotContainer} ${sharedStyles.card}`}
+      onClick={() => navigate(`/lots/${lot.lot_id}`)}
+    >
+      {lot.picture ? <img src={lot.picture} width={"230px"} alt="" /> : null}
       <div>
         <h3>{lot.lot_name}</h3>
         <p className={sharedStyles.withoutMargin}><span className={sharedStyles.bold}>До: </span>{transformDate(lot.end_date)}</p>
         <p className={sharedStyles.withoutMargin}><span className={sharedStyles.bold}>Ціна: </span>{lot.price}₴</p>
       </div>
     </div>
-  ))
+  ));
 
   return (
     <div>
@@ -45,5 +49,5 @@ export const HomePage = () => {
         </div>
       ) : null}
     </div>
-  )
-}
+  );
+};

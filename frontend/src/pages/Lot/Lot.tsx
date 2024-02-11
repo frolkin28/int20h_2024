@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link as RouterLink } from "react-router-dom";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { BetsList, Chat } from "../../components";
@@ -10,7 +11,7 @@ import { transformDate } from "../../utils/dates";
 export const LotPage = () => {
   const { lotId } = useParams<{ lotId: string }>();
 
-  const [lot, setLot] = useState<Lot | null>(null)
+  const [lot, setLot] = useState<Lot | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -20,12 +21,12 @@ export const LotPage = () => {
   }, [])
 
   if (!lot) {
-    return <h1>Завантаження...</h1>
+    return <h1>Завантаження...</h1>;
   }
 
-  const renderedPictures = lot.pictures.map((picture) => {
-    return <img src={picture} width={"250px"} alt="Lot pictures" />
-  })
+  const renderedPictures = lot.pictures.map((picture, index) => {
+    return <img key={index} src={picture} width={"250px"} alt="Lot pictures" />;
+  });
 
   return (
     <div className={styles.container}>
@@ -38,6 +39,11 @@ export const LotPage = () => {
         <p>
           <span className={sharedStyles.bold}>Стартова ціна: </span> {lot.start_price}
         </p>
+        {lot?.is_author && (
+          <div className={styles.container}>
+            <RouterLink to={`/lots/edit/${lotId}`}>Редагувати</RouterLink>
+          </div>
+        )}
         {renderedPictures}
       </div>
       <div className={styles.rightColumn}>

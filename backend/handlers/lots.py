@@ -1,4 +1,5 @@
 from typing import cast
+from backend.lib.auth import get_user_id_or_none
 from backend.utils import error_response, success_response
 
 from flask import Blueprint, request
@@ -104,7 +105,7 @@ def update_lot(id):
             '400':
                 content:
                     application/json:
-                        schema: 
+                        schema:
                              oneOf:
                                 - UpsertLotErrorResponse
                                 - ErrorMessageResponse
@@ -122,13 +123,7 @@ def update_lot(id):
     try:
         request_data = cast(
             LotPayload,
-            LotSchema().load(
-                {
-                    "lot_name": request.form.get("lot_name"),
-                    "description": request.form.get("description"),
-                    "end_date": request.form.get("end_date"),
-                }
-            ),
+            LotSchema().load(request.get_json()),
         )
     except ValidationError as e:
         return error_response(status_code=400, errors=e.messages)
@@ -163,7 +158,7 @@ def lot_data(id):
             '400':
                 content:
                     application/json:
-                        schema: 
+                        schema:
                              oneOf:
                                 - UpsertLotErrorResponse
                                 - ErrorMessageResponse
@@ -176,13 +171,12 @@ def lot_data(id):
     """
 
     try:
-        lot_data = get_lot_data(id)
+        lot_data = get_lot_data(id, get_user_id_or_none())
     except (InvalidDateError, LotDoesNotExist) as e:
         return error_response(
             status_code=400,
             errors={"message": e.message},
         )
-
 
     return success_response(data={"lot_data": lot_data})
 
@@ -201,7 +195,7 @@ def main_page():
             '400':
                 content:
                     application/json:
-                        schema: 
+                        schema:
                              oneOf:
                                 - UpsertLotErrorResponse
                                 - ErrorMessageResponse

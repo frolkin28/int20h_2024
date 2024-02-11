@@ -22,6 +22,7 @@ export interface Message {
 }
 
 export interface Lot {
+  is_author: boolean;
   lot_name: string;
   description: string;
   pictures: string[];

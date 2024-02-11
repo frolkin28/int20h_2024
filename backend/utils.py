@@ -6,6 +6,11 @@ import yaml
 from flask import jsonify, Response
 
 
+def prepare_amount(amount: int) -> str:
+    formatted_string = "{:.2f}".format(float(amount) / 100)
+    return formatted_string
+
+
 def success_response(
     status_code: int = 200,
     data: Mapping | None = None,

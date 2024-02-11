@@ -5,11 +5,7 @@ from backend.exc import HigherBetExistsError
 from backend.models import Bet, User, Lot
 from backend.services.db import transaction, db
 from backend.types import BetForDisplay, UserForDisplay
-
-
-def prepare_amount(amount: int) -> str:
-    formatted_string = "{:.2f}".format(float(amount) / 100)
-    return formatted_string
+from backend.utils import prepare_amount
 
 
 def get_bets_for_display(lot_id: int) -> list[BetForDisplay]:

@@ -1,0 +1,51 @@
+.container {
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.editFormHeader {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.formLabel {
+    font-family: "Lohit Tamil";
+    font-weight: 400;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+}
+
+.editDTInput {
+    width: 90%;
+    height: 40px;
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+
+.editForm {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputBlock {
+    padding: 8px;
+    font-size: 14px;
+}
+
+.editSubmitButton {
+    background-color: #3498db;
+    color: #fff;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
