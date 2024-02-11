@@ -11,12 +11,14 @@ export const AddLotForm = () => {
 
   const [lotName, setLotName] = useState('');
   const [description, setDescription] = useState('');
+  const [startPrice, setStartPrice] = useState('');
   const [endDate, setEndDate] = useState('');
   const [images, setImages] = useState<File[]>([]);
   const [isSubmitting, setSubmitting] = useState(false);
 
   const handleLotNameChange = (value: string) => setLotName(value);
   const handleDescriptionChange = (value: string) => setDescription(value);
+  const handleStartPriceChange = (value: string) => setStartPrice(value);
   const handleEndDateChange = (value: string) => setEndDate(value);
   const handleImageChange = (value: File[]) => setImages([...value]);
 
@@ -46,6 +48,7 @@ export const AddLotForm = () => {
       formData.append("lot_name", lotName)
       formData.append("description", description)
       formData.append("end_date", endDate)
+      formData.append("start_price", startPrice)
       images.forEach((image) => formData.append("images", image))
 
       const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/lots/`, formData, {
@@ -79,6 +82,15 @@ export const AddLotForm = () => {
             id="lot-description"
             value={description}
             onChange={handleDescriptionChange}
+          />
+        </div>
+        <div className={formStyles.inputBlock}>
+          <label className={formStyles.formLabel} htmlFor="start-price">Стартова ціна</label>
+          <TextInput
+            id="start-price"
+            type="number"
+            value={startPrice}
+            onChange={handleStartPriceChange}
           />
         </div>
         <div className={formStyles.inputBlock}>

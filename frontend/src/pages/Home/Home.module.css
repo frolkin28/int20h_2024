@@ -11,3 +11,9 @@
     flex-direction: column;
     cursor: pointer;
 }
+
+.loadMoreButton {
+    display: flex;
+    margin-top: 30px;
+    justify-content: center;
+}

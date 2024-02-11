@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 
 from backend.exc import HigherBetExistsError
-from backend.models import Bet, User
+from backend.models import Bet, User, Lot
 from backend.services.db import transaction, db
 from backend.types import BetForDisplay, UserForDisplay
 
@@ -47,13 +47,18 @@ def get_bets_for_display(lot_id: int) -> list[BetForDisplay]:
 
 def create_bet(user_id: int, lot_id: int, amount: Decimal) -> Bet:
     with transaction():
+        lot = Lot.query.get(lot_id)
+
+        prepared_amount = int(amount * 100)  # в копійки
+        if (prepared_amount <= lot.start_price):
+            raise HigherBetExistsError
+
         last_bet = (
             Bet.query.filter(Bet.lot_id == lot_id).order_by(Bet.id.desc()).first()
         )
-        prepared_amount = int(amount * 100)  # в копійки
-
         if last_bet and prepared_amount <= last_bet.amount:
             raise HigherBetExistsError
+
         bet = Bet(
             user_id=user_id,
             lot_id=lot_id,

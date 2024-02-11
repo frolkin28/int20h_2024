@@ -211,11 +211,12 @@ def main_page():
 
     try:
         page = request.args.get('page', 1, type=int)
-        per_page = request.args.get('per_page', 10, type=int)
+        per_page = 13
         lot_list = main_page_data(page, per_page)
+        has_more_items = True if len(lot_list) == per_page else False
     except (InvalidDateError, ValidationError) as e:
         return error_response(
             status_code=400,
             errors={"message": e.message},
         )
-    return success_response(data={"lot_data": lot_list})
+    return success_response(data={"lot_data": lot_list[:per_page-1], "has_more_items": has_more_items})

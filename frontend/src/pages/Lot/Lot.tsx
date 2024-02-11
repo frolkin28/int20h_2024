@@ -14,12 +14,8 @@ export const LotPage = () => {
 
   useEffect(() => {
     (async () => {
-      try{
-        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/lots/${lotId}`)
-        setLot(res.data.data.lot_data)
-      } catch (error) {
-       console.log(error)
-      }
+      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/lots/${lotId}`)
+      setLot(res.data.data.lot_data)
     })()
   }, [])
 
@@ -38,6 +34,9 @@ export const LotPage = () => {
         <p>{lot.description}</p>
         <p>
           <span className={sharedStyles.bold}>Дата закінчення аукціону: </span> {transformDate(lot.end_date)}
+        </p>
+        <p>
+          <span className={sharedStyles.bold}>Стартова ціна: </span> {lot.start_price}
         </p>
         {renderedPictures}
       </div>

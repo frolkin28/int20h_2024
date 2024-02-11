@@ -35,7 +35,10 @@ export const Navbar = () => {
 
   return (
     <div className={styles.container}>
-      <Link to="/" className={styles["link-logo"]}><p className={styles["logo"]}>charity auction</p></Link>
+      <Link to="/" className={styles["link-logo"] }>
+        <p className={styles["logo"]}>charity auction</p>
+        <img src="https://dq5d23gxa9vto.cloudfront.net/logo.png" width={"30px"} alt="LOGO" />
+      </Link>
       <ul className={styles['buttons-list']}>
         <li>
           <Link className={styles["add-lot"]} to={isSignedIn ? "/add-lot" : "/sign-in"} >Додати</Link>
