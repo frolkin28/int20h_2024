@@ -39,14 +39,12 @@ def upload_photo_to_s3(file: FileStorage, bucket_name: str, object_name: str) ->
 
 
 def create_picture(pictures: list[FileStorage], lot_id: int) -> None:
-
     bucket_name = 'cha-cha-images' 
 
     object_prefix = str(lot_id)
 
     for img in pictures:
         object_name = f"{object_prefix}/{img.filename}"
-        print("TEST: ", object_name)
         picture_url = upload_photo_to_s3(img, bucket_name, object_name)
         if picture_url:
             picture = Picture(
@@ -147,7 +145,7 @@ def get_lot_data(id: int) -> dict:
                 "end_date": lot.end_date,
                 "pictures": picture_urls
             }
-    
+
         return lot_payload
     else:
         return None

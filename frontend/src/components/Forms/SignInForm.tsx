@@ -1,6 +1,6 @@
 import React, {useContext, useState} from "react";
-import {useNavigate} from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { TextInput, Button } from "../";
 import { AuthContext } from "../../AuthContext";
 
@@ -17,13 +17,14 @@ export const SignInForm = () => {
 
   const handleSubmit = async () => {
     setSubmitting(true)
-    if (!email.length) {
-      return alert("Введіть email")
-    }
-    if (!password.length) {
-      return alert("Введіть пароль")
-    }
     try {
+      if (!email.length) {
+        return alert("Введіть email")
+      }
+      if (!password.length) {
+        return alert("Введіть пароль")
+      }
+
       const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/sign_in`, {
         email,
         password,

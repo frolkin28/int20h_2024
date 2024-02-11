@@ -1,7 +1,11 @@
 export { Navbar } from "./Navbar/Navbar";
-export { TextInput } from "./Input/TextInput";
-export { Checkbox } from "./Checkbox/Checkbox";
-export { SignUpForm } from "./Forms/SignUpForm";
-export { SignInForm } from "./Forms/SignInForm";
-export { Button } from "./Buttons/Button";
+export { TextInput } from "./Input/TextInput"
+export { TextArea } from "./Input/TextArea"
+export { Checkbox } from "./Checkbox/Checkbox"
+export { FileInput } from "./Input/FileInput"
+export { DateTimeInput } from "./Input/DateTimeInput"
+export { SignUpForm } from "./Forms/SignUpForm"
+export { SignInForm } from "./Forms/SignInForm"
+export { AddLotForm } from "./Forms/AddLotForm"
 export { BetsList } from "./BetsList";
+export { Button } from "./Buttons/Button"

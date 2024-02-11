@@ -19,6 +19,7 @@ export const useAuth = () => {
 
   const logout = () => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
+    setToken(null);
     setSignedIn(false);
   };
 

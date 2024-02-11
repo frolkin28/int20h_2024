@@ -1,7 +1,7 @@
 import React from "react";
 import { createBrowserRouter } from 'react-router-dom';
 import { NavbarLayout } from "./layouts";
-import { HomePage, LotPage, SignInPage, SignUpPage } from "./pages";
+import { HomePage, LotPage, SignInPage, SignUpPage, AddLotPage } from "./pages";
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +23,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/add-lot",
-        element: <h1>Add lot</h1>
+        element: <AddLotPage />
       },
       {
         path: "/lots/:lotId",

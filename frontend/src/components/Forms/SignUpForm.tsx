@@ -26,22 +26,23 @@ export const SignUpForm = () => {
 
   const handleSubmit = async () => {
     setSubmitting(true)
-    if (!email.length) {
-      return alert("Введіть email")
-    }
-    if (!firstName.length) {
-      return alert("Введіть імʼя")
-    }
-    if (!lastName.length) {
-      return alert("Введіть прізвище")
-    }
-    if (!password.length) {
-      return alert("Введіть пароль")
-    }
-    if (password !== passwordRepeat) {
-      return alert("Паролі не співпадають")
-    }
-    try {
+    try{
+      if (!email.length) {
+        return alert("Введіть email")
+      }
+      if (!firstName.length) {
+        return alert("Введіть імʼя")
+      }
+      if (!lastName.length) {
+        return alert("Введіть прізвище")
+      }
+      if (!password.length) {
+        return alert("Введіть пароль")
+      }
+      if (password !== passwordRepeat) {
+        return alert("Паролі не співпадають")
+      }
+
       const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/sign_up`, {
         first_name: firstName,
         last_name: lastName,
