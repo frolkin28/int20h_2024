@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { useAuction, useAuth } from "../../hooks";
+import { useContext, useState } from "react";
+import { AuthContext } from "../../AuthContext";
+import { useAuction } from "../../hooks";
 import { BetItem } from "./views/BetItem";
 import sharedStyles from "../../App.module.css"
 
@@ -10,7 +11,7 @@ interface BetsListProps {
 export const BetsList = ({ lotId }: BetsListProps) => {
   const { bets, makeBet } = useAuction(lotId);
   const [newBetAmount, setNewBetAmount] = useState("");
-  const { isSignedIn } = useAuth();
+  const { isSignedIn } = useContext(AuthContext);
 
   const handleMakeBet = (e: React.FormEvent) => {
     e.preventDefault();
