@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Any
+from backend.utils import prepare_amount
 from sqlalchemy.orm import joinedload
 from flask import current_app
 from sqlalchemy import desc
@@ -19,7 +20,6 @@ from backend.exc import (
     InvalidLotID,
     LotEndedError,
     InvalidDateError,
-    UserDoesNotExist,
 )
 
 from datetime import date
@@ -28,11 +28,10 @@ from backend.exc import UserPermissionError
 
 
 def upload_photo_to_s3(file: FileStorage, bucket_name: str, object_name: str) -> str:
-
     s3_client = boto3.client("s3")
 
     try:
-        response = s3_client.upload_fileobj(file, bucket_name, object_name)
+        s3_client.upload_fileobj(file, bucket_name, object_name)
     except ClientError as e:
         current_app.logger.exception(e)
 
@@ -64,7 +63,7 @@ def create_lot(payload: LotPayload, pictures: list[FileStorage], user_id: int) -
         author_id=user_id,
         creation_date=date.today(),
         end_date=payload["end_date"],
-        start_price=start_price
+        start_price=start_price,
     )
     db.session.add(lot)
     db.session.commit()
@@ -146,13 +145,13 @@ def get_lot_data(lot_id: int, request_user_id: int | None) -> dict:
         picture.url for picture in Picture.query.filter(Picture.lot_id == lot_id)
     ]
 
-    start_price = lot.start_price/100 if lot.start_price else None
+    start_price = lot.start_price / 100 if lot.start_price else None
 
     if lot:
         lot_payload: FullLotPayload = {
             "lot_name": lot.lot_name,
             "description": lot.description,
-            "start_price": start_price,
+            "start_price": prepare_amount(lot.start_price) if lot.start_price else None,
             "is_author": lot.user_id == request_user_id,
             "author": {
                 "email": lot.user_email,
