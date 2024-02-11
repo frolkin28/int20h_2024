@@ -5,10 +5,10 @@ from flask import Blueprint, request
 from marshmallow import ValidationError
 from flask_jwt_extended import jwt_required, current_user
 
-from backend.lib.schemas import LotSchema
-from backend.types import LotPayload
+from backend.lib.schemas import LotSchema, FullLotSchema
+from backend.types import LotPayload, FullLotPayload
 
-from backend.lib.lots import create_lot, update_lot_data
+from backend.lib.lots import create_lot, update_lot_data, get_lot_data
 from backend.exc import (
     InvalidDateError,
     LotDoesNotExist,
@@ -144,3 +144,40 @@ def update_lot(id):
         )
 
     return success_response(data={"lot_id": lot_id})
+
+
+@bp.route("/<int:id>", methods=("GET",))
+def lot_data(id):
+    """
+    ---
+    get:
+        summary: Сторінка лоту
+        responses:
+            '200':
+                content:
+                    application/json:
+                        schema: FullLotSchema
+            '400':
+                content:
+                    application/json:
+                        schema: 
+                             oneOf:
+                                - UpsertLotErrorResponse
+                                - ErrorMessageResponse
+            '403':
+                content:
+                    application/json:
+                        schema: ErrorMessageResponse
+        tags:
+        - lots
+    """
+
+    try:
+        lot_data = get_lot_data(id)
+    except (InvalidDateError, LotDoesNotExist) as e:
+        return error_response(
+            status_code=400,
+            errors={"message": e.message},
+        )
+
+    return success_response(data={"lot_data": lot_data})
