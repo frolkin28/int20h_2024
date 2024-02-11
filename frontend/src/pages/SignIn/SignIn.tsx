@@ -1,9 +1,9 @@
 import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { SignUpForm } from "../../components"
 import { AuthContext } from "../../AuthContext";
+import { SignInForm } from "../../components";
 
-export const SignUpPage = () => {
+export const SignInPage = () => {
   const navigate = useNavigate();
   const { isSignedIn } = useContext(AuthContext)
 
@@ -15,8 +15,8 @@ export const SignUpPage = () => {
 
   return (
     <div>
-      <h1>Реєстрація</h1>
-      <SignUpForm />
+      <h1>Вхід</h1>
+      <SignInForm />
     </div>
   )
 }
