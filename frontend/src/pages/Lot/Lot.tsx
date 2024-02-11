@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { BetsList, Chat } from "../../components";
-import { Lot } from "../../types"
-import styles from "./Lot.module.css"
-import sharedStyles from "../../App.module.css"
+import { Lot } from "../../types";
+import styles from "./Lot.module.css";
+import sharedStyles from "../../App.module.css";
+import { transformDate } from "../../utils/dates";
 
 export const LotPage = () => {
   const { lotId } = useParams<{ lotId: string }>();
@@ -36,7 +37,7 @@ export const LotPage = () => {
         <h1>{lot.lot_name}</h1>
         <p>{lot.description}</p>
         <p>
-          <span>Дата закінчення аукціону: </span> {lot.end_date}
+          <span className={sharedStyles.bold}>Дата закінчення аукціону: </span> {transformDate(lot.end_date)}
         </p>
         {renderedPictures}
       </div>
