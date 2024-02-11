@@ -3,6 +3,7 @@ from backend.lib.schemas.validation import (
     SignInSchema,
     LotSchema,
     FullLotSchema,
+    ListLotSchema,
     BetCreationSchema,
 )
 from backend.lib.schemas.docs import (
