@@ -10,7 +10,7 @@ export const Button = (props: ButtonProps) => {
   const { text, onClick, disabled } = props
 
   return (
-    <button className={styles["my-button"]}type="button" onClick={onClick} disabled={disabled}>
+    <button className={styles["my-button"]} type="button" onClick={onClick} disabled={disabled}>
       {text}
     </button>
   )
