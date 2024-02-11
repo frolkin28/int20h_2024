@@ -28,6 +28,13 @@ FROM base AS dev
 ENV BACKEND_CONFIG_PATH "config/app/dev.yaml"
 
 CMD [ "python", "-m", "backend" ]
+
+# ==== test stage ====
+FROM base AS test
+
+ENV BACKEND_CONFIG_PATH "config/app/test.yaml"
+RUN pdm install --no-lock --no-editable --dev
+
 # ==== production stage ====
 FROM base AS prd
 
