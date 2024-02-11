@@ -58,12 +58,16 @@ def create_picture(pictures: list[FileStorage], lot_id: int) -> None:
 
 
 def create_lot(payload: LotPayload, pictures: list[FileStorage], user_id: int) -> int:
+
+    start_price = payload["start_price"] * 100
+
     lot = Lot(
         lot_name=payload["lot_name"],
         description=payload["description"],
         author_id=user_id,
         creation_date=date.today(),
         end_date=payload["end_date"],
+        start_price=start_price
     )
     db.session.add(lot)
     db.session.commit()

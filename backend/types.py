@@ -15,6 +15,13 @@ class SignInPayload(t.TypedDict):
     password: str
 
 
+class LotCreationLoad(t.TypedDict):
+    lot_name: str
+    description: str
+    end_date: datetime
+    start_price: float
+
+
 class LotPayload(t.TypedDict):
     lot_name: str
     description: str
