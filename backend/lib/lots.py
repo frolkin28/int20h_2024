@@ -48,7 +48,6 @@ def create_picture(pictures: list[FileStorage], lot_id: int) -> None:
 
     for img in pictures:
         object_name = f"{object_prefix}/{img.filename}"
-        print("TEST: ", object_name)
         picture_url = upload_photo_to_s3(img, bucket_name, object_name)
         if picture_url:
             picture = Picture(
@@ -158,7 +157,7 @@ def get_lot_data(id: int) -> dict:
 def main_page_data(page: int, per_page: int) -> list:
     data = []
 
-    lots = Lot.query.paginate(page, per_page, error_out=False)
+    lots = Lot.query.paginate(page=page, per_page=per_page, error_out=False)
     for lot in lots.items:
         picture = Picture.query.filter(Picture.lot_id == lot.id).first()
         biggest_bet = Bet.query.filter(Bet.lot_id == lot.id).order_by(desc(Bet.amount)).first()
@@ -176,4 +175,3 @@ def main_page_data(page: int, per_page: int) -> list:
         }
         data.append(load_data)
     return data
-
