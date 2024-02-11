@@ -1,14 +1,14 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { Button } from "../Buttons/Button";
 import { TextInput } from "../Input/TextInput";
 import { useChat } from "../../hooks/useChat";
-import { useAuth } from "../../hooks";
+import { AuthContext } from "../../AuthContext";
 
 export const Chat = ({ lotId }: { lotId: number }) => {
   const [inputMessage, setInputMessage] = useState<string>("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { messages, createMessage } = useChat(lotId);
-  const { isSignedIn } = useAuth();
+  const { isSignedIn } = useContext(AuthContext);
 
   useEffect(() => {
     // Scroll to the bottom on new message

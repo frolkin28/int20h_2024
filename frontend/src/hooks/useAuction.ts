@@ -1,9 +1,9 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useContext } from "react";
 import { Manager, Socket } from "socket.io-client";
 
 import { Bet } from "../types";
 import { registerBaseListeners, AuctionEvents } from "../lib/ws";
-import { useAuth } from "./useAuth";
+import { AuthContext } from "../AuthContext";
 
 interface AuctionState {
   bets: Bet[];
@@ -13,7 +13,7 @@ interface AuctionState {
 export const useAuction: (lotID: number) => AuctionState = (lotID) => {
   const [bets, setBets] = useState<Bet[]>([]);
   const ws = useRef<Socket | null>(null);
-  const { token } = useAuth();
+  const { token } = useContext(AuthContext);
 
   const joinAuction = useCallback(
     (lotID: number) => {
