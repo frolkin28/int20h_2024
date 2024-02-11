@@ -13,6 +13,7 @@ from backend.lib.schemas import (
     UpsertLotErrorResponse,
     AuthSuccessResponse,
     LotSchema,
+    FullLotSchema,
 )
 
 
@@ -57,6 +58,7 @@ def get_apispec(app: Flask) -> APISpec:
     spec.components.schema("SignUpErrorResponse", schema=SignUpErrorResponse)
     spec.components.schema("UpsertLotErrorResponse", schema=UpsertLotErrorResponse)
     spec.components.schema("LotSchema", schema=LotSchema)
+    spec.components.schema("FullLotSchema", schema=FullLotSchema)
 
     create_tags(spec)
 

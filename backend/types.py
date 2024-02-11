@@ -20,6 +20,15 @@ class LotPayload(t.TypedDict):
     end_date: datetime
 
 
+class FullLotPayload(t.TypedDict):
+    lot_name: str
+    description: str
+    author: dict[str, str, str]  
+    creation_date: datetime
+    end_date: datetime
+    pictures: list[str]
+
+
 class UserForDisplay(t.TypedDict):
     id: int
     email: str
