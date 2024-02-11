@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import styles from './FileInput.module.css';
 
 interface FileInputProps {
   multiple?: boolean
@@ -13,6 +14,9 @@ export const FileInput = (props: FileInputProps) => {
   }
 
   return (
-    <input type="file" multiple={multiple} onChange={handleChange} />
+    <div className={styles["FileInputContainer"]}>
+      <input className={styles["FileInput"]} type="file" multiple={multiple} onChange={handleChange} />
+    </div>
+    
   )
 }
