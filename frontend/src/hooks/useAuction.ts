@@ -1,17 +1,9 @@
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useState, useCallback, useRef, useEffect, useContext } from "react";
 import { Manager, Socket } from "socket.io-client";
 
 import { Bet } from "../types";
-import { useAuth } from "./useAuth";
-
-enum AuctionEvents {
-  JOIN_ERROR = "join_error",
-  UNAUTHORIZED = "unauthorized",
-  VALIDATION_ERROR = "validation_error",
-  BETS_LOG_UPDATE = "bets_log_update",
-  BET_CREATION_SUCCESS = "bet_creation_success",
-  BET = "bet",
-}
+import { registerBaseListeners, AuctionEvents } from "../lib/ws";
+import { AuthContext } from "../AuthContext";
 
 interface AuctionState {
   bets: Bet[];
@@ -21,57 +13,42 @@ interface AuctionState {
 export const useAuction: (lotID: number) => AuctionState = (lotID) => {
   const [bets, setBets] = useState<Bet[]>([]);
   const ws = useRef<Socket | null>(null);
-  const { token } = useAuth();
+  const { token } = useContext(AuthContext);
 
-  const joinAuction = (lotID: number) => {
-    ws.current?.emit("join_auction", { lot_id: lotID });
-  };
+  const joinAuction = useCallback(
+    (lotID: number) => {
+      ws.current?.emit("join_auction", { lot_id: lotID });
+    },
+    [ws]
+  );
+
+  const onConnect = useCallback(() => {
+    joinAuction(lotID);
+  }, [lotID, joinAuction]);
+
+  const onReconnect = useCallback(() => {
+    setBets([]);
+    joinAuction(lotID);
+  }, [lotID, joinAuction]);
 
   useEffect(() => {
-    const manager = new Manager(`${process.env.REACT_APP_BASE_URL}/ws`, {
+    if (!process.env.REACT_APP_BASE_URL) {
+      throw Error("Base url is not specified");
+    }
+    const manager = new Manager(process.env.REACT_APP_BASE_URL, {
       reconnectionDelayMax: 1000,
     });
     ws.current = manager.socket("/bets");
 
     const wsCurrent = ws.current;
 
-    wsCurrent.on("connect", () => {
-      console.log("Joined auction");
-      joinAuction(lotID);
-    });
-
-    wsCurrent.on("reconnect", (attempt) => {
-      console.log(`Auction reconnected, attempts: ${attempt}`);
-      setBets([]);
-      joinAuction(lotID);
-    });
-
-    wsCurrent.on("reconnect_attempt", (attempt) => {
-      console.log(`Auction reconnection attempt: ${attempt}`);
-    });
-
-    wsCurrent.on("reconnect_error", (error) => {
-      console.warn(error);
-    });
-
-    wsCurrent.on(AuctionEvents.JOIN_ERROR, (data) => {
-      alert(data.message);
-    });
-
-    wsCurrent.on(AuctionEvents.UNAUTHORIZED, () => {
-      alert("Авторизуйтесь для того, щоб зробити ставку");
-    });
-
-    wsCurrent.on(AuctionEvents.VALIDATION_ERROR, (data) => {
-      alert(JSON.stringify(data.message));
-    });
+    registerBaseListeners(wsCurrent, onConnect, onReconnect);
 
     wsCurrent.on(AuctionEvents.BET_CREATION_SUCCESS, (data) => {
       alert(data.message);
     });
 
     wsCurrent.on(AuctionEvents.BETS_LOG_UPDATE, (data) => {
-      console.log("Bets", data.bets);
       setBets((prevState) => {
         return [...prevState, ...data.bets];
       });
@@ -92,7 +69,7 @@ export const useAuction: (lotID: number) => AuctionState = (lotID) => {
         access_token: token,
       });
     },
-    [lotID, token]
+    [lotID, token, ws]
   );
 
   return { bets, makeBet };

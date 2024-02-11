@@ -12,3 +12,11 @@ export interface Bet {
   creation_date: number;
   author: User;
 }
+
+export interface Message {
+  id: number;
+  content: string;
+  lot_id: string;
+  creation_date: string;
+  author: User;
+}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuction } from "../../hooks";
+import { useAuction, useAuth } from "../../hooks";
 import { BetItem } from "./views/BetItem";
 
 interface BetsListProps {
@@ -9,6 +9,7 @@ interface BetsListProps {
 export const BetsList = ({ lotId }: BetsListProps) => {
   const { bets, makeBet } = useAuction(lotId);
   const [newBetAmount, setNewBetAmount] = useState("");
+  const { isSignedIn } = useAuth();
 
   const handleMakeBet = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +27,7 @@ export const BetsList = ({ lotId }: BetsListProps) => {
   return (
     <div>
       <div>
-        <h3>Bets list</h3>
+        <h3>Поточні ставки</h3>
       </div>
       <div>
         <ul>
@@ -44,7 +45,10 @@ export const BetsList = ({ lotId }: BetsListProps) => {
               onChange={(e) => setNewBetAmount(e.target.value)}
             />
           </label>
-          <button type="submit">Place Bet</button>
+
+          <button type="submit" disabled={!(isSignedIn && newBetAmount)}>
+            {isSignedIn ? "Підняти" : "Необхідно авторизуватись"}
+          </button>
         </form>
       </div>
     </div>
