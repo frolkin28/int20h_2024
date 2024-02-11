@@ -1,20 +1,22 @@
 import { useState, useEffect } from "react";
 
+const ACCESS_TOKEN_KEY = "access_token"
+
 export const useAuth = () => {
   const [isSignedIn, setSignedIn] = useState(false)
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token")
+    const token = localStorage.getItem(ACCESS_TOKEN_KEY)
     setSignedIn(!!token)
   }, [])
 
   const login = (token: string) => {
-    localStorage.setItem("access_token", token)
+    localStorage.setItem(ACCESS_TOKEN_KEY, token)
     setSignedIn(true)
   }
 
   const logout = () => {
-    localStorage.removeItem("access_token")
+    localStorage.removeItem(ACCESS_TOKEN_KEY)
     setSignedIn(false)
   }
 
