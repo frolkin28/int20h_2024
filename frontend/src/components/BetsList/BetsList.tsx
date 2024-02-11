@@ -13,14 +13,23 @@ export const BetsList = ({ lotId }: BetsListProps) => {
 
   const handleMakeBet = (e: React.FormEvent) => {
     e.preventDefault();
-    if (newBetAmount.trim() !== "") {
-      const bet = parseFloat(newBetAmount);
-      if (bet) {
-        makeBet(bet);
-        setNewBetAmount("");
-      } else {
-        alert("Це невалідна сума");
-      }
+
+    if (!isSignedIn) {
+      return alert("Необхідно авторизуватись")
+    }
+
+    const amount = newBetAmount?.trim()
+
+    if (!amount || amount === "") {
+      return alert("Введіть суму")
+    }
+
+    const bet = parseFloat(newBetAmount);
+    if (bet) {
+      makeBet(bet);
+      setNewBetAmount("");
+    } else {
+      alert("Це невалідна сума");
     }
   };
 
@@ -46,8 +55,8 @@ export const BetsList = ({ lotId }: BetsListProps) => {
             />
           </label>
 
-          <button type="submit" disabled={!(isSignedIn && newBetAmount)}>
-            {isSignedIn ? "Підняти" : "Необхідно авторизуватись"}
+          <button type="submit">
+            Підняти
           </button>
         </form>
       </div>

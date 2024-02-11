@@ -20,3 +20,12 @@ export interface Message {
   creation_date: string;
   author: User;
 }
+
+export interface Lot {
+  lot_name: string;
+  description: string;
+  pictures: string[];
+  end_date: string;
+  creation_date: string;
+  author: User;
+}
