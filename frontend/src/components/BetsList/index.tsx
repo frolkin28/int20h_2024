@@ -38,10 +38,11 @@ export const BetsList = ({ lotId }: BetsListProps) => {
 
         <form onSubmit={handleMakeBet}>
           <label>
-            Зробити ставку:
+            Зробити ставку (грн):
             <input
               type="number"
               value={newBetAmount}
+              placeholder="формат 100.00"
               onChange={(e) => setNewBetAmount(e.target.value)}
             />
           </label>
