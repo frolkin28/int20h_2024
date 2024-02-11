@@ -1,5 +1,8 @@
 from datetime import datetime
 from typing import Any
+from sqlalchemy.orm import joinedload
+from flask import current_app
+
 
 import boto3
 from botocore.exceptions import ClientError
@@ -27,8 +30,7 @@ def upload_photo_to_s3(file_path: str, bucket_name: str, object_name: str) -> st
     try:
         response = s3_client.upload_file(file_path, bucket_name, object_name)
     except ClientError as e:
-        print(e)
-        return None
+        current_app.logger.exception(e)
 
     return f"https://dq5d23gxa9vto.cloudfront.net/{object_name}"
 
@@ -118,16 +120,8 @@ def update_lot_data(payload: LotPayload, user_id: int, lot_id: int) -> int:
 
 def get_lot_data(id: int) -> dict:
 
-    try:
-        lot = Lot.query.get(id)
-    except:
-        raise LotDoesNotExist
-    
-    try:
-        author = User.query.get(lot.id)
-    except:
-        UserDoesNotExist
-
+    lot = Lot.query.get(id)
+    author = User.query.get(lot.id)
     lot_pictures = Picture.query.filter(Picture.lot_id == id).all()
     
     if lot_pictures:
@@ -135,7 +129,8 @@ def get_lot_data(id: int) -> dict:
     else:
         picture_urls = []
 
-    lot_payload: FullLotPayload = {
+    if lot:
+        lot_payload = {
             "lot_name": lot.lot_name,
             "description": lot.description,
             "author": {
@@ -147,7 +142,9 @@ def get_lot_data(id: int) -> dict:
             "end_date": lot.end_date,
             "pictures": picture_urls
         }
-    return lot_payload
+        return lot_payload
+    else:
+        return None
 
 
 
