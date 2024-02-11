@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuction } from "../../hooks";
+import { BetItem } from "./views/BetItem";
 
 interface BetsListProps {
   lotId: number;
@@ -29,14 +30,14 @@ export const BetsList = ({ lotId }: BetsListProps) => {
       </div>
       <div>
         <ul>
-          {bets.map((bet, index) => (
-            <li key={index}>{`Bet #${index + 1}: $${bet.amount}`}</li>
+          {bets.map((bet) => (
+            <BetItem key={bet.id} bet={bet} />
           ))}
         </ul>
 
         <form onSubmit={handleMakeBet}>
           <label>
-            Make a new bet:
+            Зробити ставку:
             <input
               type="number"
               value={newBetAmount}

@@ -1,0 +1,7 @@
+.bet-author-fullname:hover + .bet-author-email {
+    display: block;
+}
+
+.bet-author-email {
+    display: none;
+}

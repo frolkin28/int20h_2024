@@ -28,12 +28,17 @@ export const useAuction: (lotID: number) => AuctionState = (lotID) => {
   };
 
   useEffect(() => {
-    const manager = new Manager("ws://localhost:8080/ws", {
+    const manager = new Manager(`${process.env.REACT_APP_BASE_URL}/ws`, {
       reconnectionDelayMax: 1000,
     });
     ws.current = manager.socket("/bets");
 
     const wsCurrent = ws.current;
+
+    wsCurrent.on("connect", () => {
+      console.log("Joined auction");
+      joinAuction(lotID);
+    });
 
     wsCurrent.on("reconnect", (attempt) => {
       console.log(`Auction reconnected, attempts: ${attempt}`);
@@ -58,7 +63,7 @@ export const useAuction: (lotID: number) => AuctionState = (lotID) => {
     });
 
     wsCurrent.on(AuctionEvents.VALIDATION_ERROR, (data) => {
-      alert(data.message);
+      alert(JSON.stringify(data.message));
     });
 
     wsCurrent.on(AuctionEvents.BET_CREATION_SUCCESS, (data) => {
@@ -66,7 +71,10 @@ export const useAuction: (lotID: number) => AuctionState = (lotID) => {
     });
 
     wsCurrent.on(AuctionEvents.BETS_LOG_UPDATE, (data) => {
-      setBets(data.bets);
+      console.log("Bets", data.bets);
+      setBets((prevState) => {
+        return [...prevState, ...data.bets];
+      });
     });
 
     return () => {

@@ -13,7 +13,6 @@ from backend.lib.auth import jwt
 
 def create_app() -> tuple[SocketIO, Flask]:
     app = Flask(__name__)
-    cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
     config = get_config()
     app.config.from_object(config)
 
@@ -35,9 +34,17 @@ def create_app() -> tuple[SocketIO, Flask]:
 
     app.register_blueprint(swagger.bp)
 
-    socketio = SocketIO(path="/ws")
+    socketio = SocketIO(cors_allowed_origins="*")
     socketio.init_app(app)
     socketio.on_namespace(websocket.BetsLogNamespace("/bets"))
     socketio.on_namespace(websocket.ChatNamespace("/chat"))
+
+    cors = CORS(
+        app,
+        resources={
+            r"/api/*": {"origins": "*"},
+            r"/socket.io/*": {"origins": "*"},
+        },
+    )
 
     return socketio, app
