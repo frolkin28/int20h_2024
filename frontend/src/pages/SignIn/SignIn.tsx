@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
 import { SignInForm } from "../../components";
+import styles from "./SingIn.module.css";
 
 export const SignInPage = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const SignInPage = () => {
 
   return (
     <div>
-      <h1>Вхід</h1>
+      <h1 className={styles["title"]}>Вхід</h1>
       <SignInForm />
     </div>
   )
