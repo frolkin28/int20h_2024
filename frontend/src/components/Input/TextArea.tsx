@@ -1,4 +1,5 @@
 import { ChangeEvent } from "react";
+import styles from './TextArea.module.css';
 
 interface TextAreaProps {
   id: string
@@ -14,6 +15,6 @@ export const TextArea = (props: TextAreaProps) => {
   }
 
   return (
-    <textarea id={id} value={value} onChange={handleChange} />
+    <textarea className={styles["TextArea"]} id={id} value={value} onChange={handleChange} />
   )
 }

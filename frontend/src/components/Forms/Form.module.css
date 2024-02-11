@@ -1,10 +1,21 @@
 .formContainer {
     display: flex;
     flex-direction: column;
-    row-gap: 20px;
+    align-items: center;
+
 }
 
 .inputBlock {
     display: flex;
     flex-direction: column;
+}
+
+.formLabel{
+    font-family: "Lohit Tamil", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: #000;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
 }
