@@ -126,7 +126,7 @@ def update_lot_data(payload: LotPayload, user_id: int, lot_id: int) -> int:
 def get_lot_data(id: int) -> dict:
 
     lot = Lot.query.get(id)
-    author = User.query.get(lot.id)
+    author = User.query.get(lot.author_id)
     lot_pictures = Picture.query.filter(Picture.lot_id == id).all()
     
     if lot_pictures:
