@@ -38,4 +38,4 @@ COPY pyproject.toml /app/pyproject.toml
 COPY pdm.lock /app/pdm.lock
 COPY migrations /app/migrations
 
-CMD ["gunicorn", "-k", "eventlet", "-w", "2", "-b", "0.0.0.0:8080", "--log-level=info", "backend.wsgi:app"]
+CMD ["gunicorn", "-k", "eventlet", "-w", "1", "-b", "0.0.0.0:8080", "--log-level=info", "backend.wsgi:app"]
