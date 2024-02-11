@@ -1,7 +1,14 @@
 import React from "react";
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter } from "react-router-dom";
 import { NavbarLayout } from "./layouts";
-import { HomePage, LotPage, SignInPage, SignUpPage, AddLotPage } from "./pages";
+import {
+  HomePage,
+  LotPage,
+  SignInPage,
+  SignUpPage,
+  AddLotPage,
+  EditLotPage,
+} from "./pages";
 
 export const router = createBrowserRouter([
   {
@@ -23,12 +30,16 @@ export const router = createBrowserRouter([
       },
       {
         path: "/add-lot",
-        element: <AddLotPage />
+        element: <AddLotPage />,
       },
       {
         path: "/lots/:lotId",
-        element: <LotPage />
-      }
-    ]
+        element: <LotPage />,
+      },
+      {
+        path: "/lots/edit/:lotId",
+        element: <EditLotPage />,
+      },
+    ],
   },
 ]);

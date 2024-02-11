@@ -19,7 +19,7 @@ from backend.exc import (
     InvalidLotID,
     LotEndedError,
     InvalidDateError,
-    UserDoesNotExist 
+    UserDoesNotExist,
 )
 
 from datetime import date
@@ -29,8 +29,7 @@ from backend.exc import UserPermissionError
 
 def upload_photo_to_s3(file: FileStorage, bucket_name: str, object_name: str) -> str:
 
-
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client("s3")
 
     try:
         response = s3_client.upload_fileobj(file, bucket_name, object_name)
@@ -41,7 +40,7 @@ def upload_photo_to_s3(file: FileStorage, bucket_name: str, object_name: str) ->
 
 
 def create_picture(pictures: list[FileStorage], lot_id: int) -> None:
-    bucket_name = 'cha-cha-images' 
+    bucket_name = "cha-cha-images"
 
     object_prefix = str(lot_id)
 
@@ -49,9 +48,7 @@ def create_picture(pictures: list[FileStorage], lot_id: int) -> None:
         object_name = f"{object_prefix}/{img.filename}"
         picture_url = upload_photo_to_s3(img, bucket_name, object_name)
         if picture_url:
-            picture = Picture(
-                url=picture_url,
-                lot_id=lot_id)
+            picture = Picture(url=picture_url, lot_id=lot_id)
             db.session.add(picture)
 
     db.session.commit()
@@ -127,33 +124,45 @@ def update_lot_data(payload: LotPayload, user_id: int, lot_id: int) -> int:
     return lot.id
 
 
-def get_lot_data(id: int) -> dict:
+def get_lot_data(lot_id: int, request_user_id: int | None) -> dict:
+    query = (
+        Lot.query.join(User, Lot.author_id == User.id)
+        .with_entities(
+            Lot.lot_name,
+            Lot.description,
+            Lot.creation_date,
+            Lot.end_date,
+            User.id.label("user_id"),
+            User.email.label("user_email"),
+            User.first_name.label("user_first_name"),
+            User.last_name.label("user_last_name"),
+        )
+        .filter(Lot.id == lot_id)
+    )
 
-    lot = Lot.query.get(id)
-    author = User.query.get(lot.author_id)
-    lot_pictures = Picture.query.filter(Picture.lot_id == id).all()
-    
-    if lot_pictures:
-        picture_urls = [picture.url for picture in lot_pictures]
-    else:
-        picture_urls = []
+    lot = query.first()
+
+    picture_urls = [
+        picture.url for picture in Picture.query.filter(Picture.lot_id == lot_id)
+    ]
 
     start_price = lot.start_price/100 if lot.start_price else None
 
     if lot:
         lot_payload: FullLotPayload = {
-                "lot_name": lot.lot_name,
-                "description": lot.description,
-                "start_price": start_price,
-                "author": {
-                    "email": author.email,
-                    "first_name": author.first_name,
-                    "last_name": author.last_name
-                },
-                "creation_date": lot.creation_date,
-                "end_date": lot.end_date,
-                "pictures": picture_urls
-            }
+            "lot_name": lot.lot_name,
+            "description": lot.description,
+            "start_price": start_price,
+            "is_author": lot.user_id == request_user_id,
+            "author": {
+                "email": lot.user_email,
+                "first_name": lot.user_first_name,
+                "last_name": lot.user_last_name,
+            },
+            "creation_date": lot.creation_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "end_date": lot.end_date.strftime("%Y-%m-%d %H:%M:%S"),
+            "pictures": picture_urls,
+        }
 
         return lot_payload
     else:
@@ -177,7 +186,7 @@ def main_page_data(page: int, per_page: int) -> list:
             "lot_id": lot.id,
             "end_date": lot.end_date,
             "picture": picture_url,
-            "price": price_lot
+            "price": price_lot,
         }
         data.append(load_data)
     return data

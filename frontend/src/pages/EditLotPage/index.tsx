@@ -1,120 +1,138 @@
-import { ChangeEvent, FormEvent, useState } from "react";
-import { useParams } from "react-router-dom";
+import axios from "axios";
+import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import styles from "./EditLotPage.module.css";
+import { DateTimeInput, TextArea, TextInput } from "../../components";
+import { AuthContext } from "../../AuthContext";
 
-const EditLotPage = () => {
-  const initialAuctionState = {
-    name: "Sample Auction",
-    description: "A description of the auction",
-    endDate: "2022-12-31",
-  };
-
+export const EditLotPage = () => {
   const { lotId } = useParams<{ lotId: string }>();
 
-  const [auction, setAuction] = useState(initialAuctionState);
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const navigate = useNavigate();
 
-  const handleInputChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value } = e.target;
-    setAuction((prevAuction) => ({
-      ...prevAuction,
-      [name]: value,
-    }));
+  const [loading, setLoading] = useState(true);
+  const [isAuthor, setisAuthor] = useState(true);
+  const { token } = useContext(AuthContext);
+
+  const prepareDate = (value: string) => {
+    return new Date(value).toISOString().slice(0, 16);
+  };
+
+  const handleDatetimeChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEndDate(e.target.value);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/api/lots/${lotId}`
+        );
+        setName(res.data.data.lot_data.lot_name);
+        setDescription(res.data.data.lot_data.description);
+        setEndDate(prepareDate(res.data.data.lot_data.end_date));
+        setisAuthor(res.data.data.lot_data.is_author);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    navigate(`/lots/${lotId}`);
+  }, [isAuthor]);
+
+  if (loading) {
+    return <h1>Завантаження...</h1>;
+  }
+  const postData = async () => {
+    setLoading(true);
+    try {
+      await axios.put(
+        `${process.env.REACT_APP_BASE_URL}/api/lots/${lotId}`,
+        {
+          lot_name: name,
+          description: description,
+          end_date: endDate,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      navigate(`/lots/${lotId}`);
+    } catch (error: any) {
+      const errMessage =
+        error.response.data.errors?.message ||
+        JSON.stringify(error.response.data.errors);
+      alert(`Сталася помилка: ${errMessage}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log("Auction information submitted:", auction);
+    if (!(name && description && endDate)) {
+      alert("Форма не може бути пустою");
+    }
+
+    postData();
   };
 
   return (
-    <div style={styles.container}>
-      <h2>Редагування аукціону:</h2>
-      <form onSubmit={handleSubmit}>
-        <label style={styles.label}>
-          Назва:
+    <div className={styles.container}>
+      <h2 className={styles.editFormHeader}>Редагування аукціону</h2>
+      <form className={styles.editForm} onSubmit={handleSubmit}>
+        <div className={styles.inputBlock}>
+          <label className={styles.formLabel} htmlFor="lot-name">
+            Назва
+          </label>
+          <TextInput
+            id="lot-name"
+            value={name}
+            onChange={(value) => {
+              setName(value);
+            }}
+          />
+        </div>
+
+        <div className={styles.inputBlock}>
+          <label className={styles.formLabel} htmlFor="lot-description">
+            Опис
+          </label>
+          <TextArea
+            id="lot-description"
+            value={description}
+            onChange={(value) => {
+              setDescription(value);
+            }}
+          />
+        </div>
+        <div className={styles.inputBlock}>
+          <label className={styles.formLabel} htmlFor="end-date">
+            Дата закінчення аукціону
+          </label>
           <input
-            type="text"
-            name="name"
-            value={auction.name}
-            onChange={handleInputChange}
-            style={styles.input}
+            className={styles.editDTInput}
+            type="datetime-local"
+            name="editableDatetime"
+            value={endDate}
+            onChange={handleDatetimeChange}
           />
-        </label>
-        <br />
-        <label style={styles.label}>
-          Опис:
-          <textarea
-            name="description"
-            value={auction.description}
-            onChange={handleInputChange}
-            style={styles.textarea}
-          />
-        </label>
-        <br />
-        <label style={styles.label}>
-          Дата закінчення:
-          <input
-            type="date"
-            name="endDate"
-            value={auction.endDate}
-            onChange={handleInputChange}
-            style={styles.input}
-          />
-        </label>
-        <br />
-        <button type="submit" style={styles.button}>
+        </div>
+        <button type="submit" className={styles.editSubmitButton}>
           Зберегти
         </button>
       </form>
     </div>
   );
-};
-
-const styles = {
-  container: {
-    maxWidth: "400px",
-    margin: "auto",
-    padding: "20px",
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-    borderRadius: "8px",
-    backgroundColor: "#f9f9f9",
-  },
-  header: {
-    textAlign: "center",
-    marginBottom: "20px",
-    color: "#333",
-  },
-  form: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  label: {
-    margin: "10px 0",
-    fontSize: "14px",
-    color: "#555",
-  },
-  input: {
-    width: "100%",
-    padding: "8px",
-    fontSize: "14px",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-  },
-  textarea: {
-    width: "100%",
-    padding: "8px",
-    fontSize: "14px",
-    border: "1px solid #ccc",
-    borderRadius: "4px",
-    minHeight: "80px",
-  },
-  button: {
-    backgroundColor: "#3498db",
-    color: "#fff",
-    padding: "10px",
-    fontSize: "16px",
-    borderRadius: "4px",
-    cursor: "pointer",
-  },
 };
