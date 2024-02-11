@@ -2,6 +2,7 @@ import { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { SignUpForm } from "../../components"
 import { AuthContext } from "../../AuthContext";
+import styles from "./SignUp.module.css";
 
 export const SignUpPage = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const SignUpPage = () => {
 
   return (
     <div>
-      <h1>Реєстрація</h1>
+      <h1 className={styles["title"]}>Реєстрація</h1>
       <SignUpForm />
     </div>
   )
