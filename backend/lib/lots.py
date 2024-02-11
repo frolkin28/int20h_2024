@@ -145,8 +145,6 @@ def get_lot_data(lot_id: int, request_user_id: int | None) -> dict:
         picture.url for picture in Picture.query.filter(Picture.lot_id == lot_id)
     ]
 
-    start_price = lot.start_price / 100 if lot.start_price else None
-
     if lot:
         lot_payload: FullLotPayload = {
             "lot_name": lot.lot_name,
