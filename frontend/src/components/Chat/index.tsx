@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "../Buttons/Button";
 import { TextInput } from "../Input/TextInput";
 import { useChat } from "../../hooks/useChat";
+import { useAuth } from "../../hooks";
 
 export const Chat = ({ lotId }: { lotId: number }) => {
   const [inputMessage, setInputMessage] = useState<string>("");
   const chatContainerRef = useRef<HTMLDivElement>(null);
   const { messages, createMessage } = useChat(lotId);
+  const { isSignedIn } = useAuth();
 
   useEffect(() => {
     // Scroll to the bottom on new message
@@ -31,6 +33,7 @@ export const Chat = ({ lotId }: { lotId: number }) => {
 
   return (
     <div>
+      <h3>Чат аукціону</h3>
       <div
         style={{ height: "300px", overflowY: "auto" }}
         ref={chatContainerRef}
@@ -44,7 +47,9 @@ export const Chat = ({ lotId }: { lotId: number }) => {
             </div>
             <div>
               <span>{message.content}</span>{" "}
-              <span>{message.creation_date}</span>
+              <span>
+                <i>{message.creation_date}</i>
+              </span>
             </div>
           </div>
         ))}
@@ -58,8 +63,8 @@ export const Chat = ({ lotId }: { lotId: number }) => {
         />
         <Button
           onClick={handleSendMessage}
-          disabled={!inputMessage}
-          text="Відправити"
+          disabled={!(isSignedIn && inputMessage)}
+          text={isSignedIn ? "Відправити" : "Необхідно авторизуватись"}
         />
       </div>
     </div>
