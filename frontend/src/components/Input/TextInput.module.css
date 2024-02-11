@@ -1,0 +1,14 @@
+.form-input {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border: 1px solid #000;
+    width: 400px;
+    height: 40px;
+    background: #fff;
+    margin: 10px;
+    
+    
+
+  }
+  

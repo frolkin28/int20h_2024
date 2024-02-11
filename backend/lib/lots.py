@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Any
 from sqlalchemy.orm import joinedload
 from flask import current_app
+
 from werkzeug.datastructures import FileStorage
 
 
@@ -26,6 +27,7 @@ from backend.exc import UserPermissionError
 
 def upload_photo_to_s3(file: FileStorage, bucket_name: str, object_name: str) -> str:
 
+
     s3_client = boto3.client('s3')
 
     try:
@@ -37,6 +39,7 @@ def upload_photo_to_s3(file: FileStorage, bucket_name: str, object_name: str) ->
 
 
 def create_picture(pictures: list[FileStorage], lot_id: int) -> None:
+
     bucket_name = 'cha-cha-images' 
 
     object_prefix = str(lot_id)
@@ -144,6 +147,7 @@ def get_lot_data(id: int) -> dict:
                 "end_date": lot.end_date,
                 "pictures": picture_urls
             }
+    
         return lot_payload
     else:
         return None

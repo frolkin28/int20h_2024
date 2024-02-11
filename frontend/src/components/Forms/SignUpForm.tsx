@@ -3,6 +3,7 @@ import axios from "axios"
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthContext";
 import { TextInput, Checkbox, Button } from "../";
+import styles from './SignUpForm.module.css';
 
 export const SignUpForm = () => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export const SignUpForm = () => {
   const [password, setPassword] = useState('');
   const [passwordRepeat, setPasswordRepeat] = useState('');
   const [isAgreed, setAgreed] = useState(false)
+  const [isSubmitting, setSubmitting] = useState(false)
 
   const handleEmailChange = (value: string) => setEmail(value)
   const handleFirstNameChange = (value: string) => setFirstName(value)
@@ -23,6 +25,7 @@ export const SignUpForm = () => {
   const handleAgreedChange = () => setAgreed(prevState => !prevState)
 
   const handleSubmit = async () => {
+    setSubmitting(true)
     if (!email.length) {
       return alert("Введіть email")
     }
@@ -38,43 +41,49 @@ export const SignUpForm = () => {
     if (password !== passwordRepeat) {
       return alert("Паролі не співпадають")
     }
-    const res = await axios.post('http://localhost:8080/api/auth/sign_up', {
-      first_name: firstName,
-      last_name: lastName,
-      email: email,
-      password: password
-    })
-    login(res.data.access_token)
-    navigate("/")
+    try {
+      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/auth/sign_up`, {
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
+        password: password
+      })
+      login(res.data.data.access_token)
+      navigate("/")
+    } catch (error) {
+      alert("Сталася помилка")
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
-    <form>
-      <div>
-        <label htmlFor="email">Email</label>
+    <form className={styles["form-container"]}>
+      <div >
+        <label className={styles["form-label"]} htmlFor="email">Email</label>
         <TextInput id="email" value={email} onChange={handleEmailChange} />
       </div>
       <div>
-        <label htmlFor="first-name">Імʼя</label>
+        <label className={styles["form-label"]} htmlFor="first-name">Імʼя</label>
         <TextInput id="first-name" value={firstName} onChange={handleFirstNameChange} />
       </div>
       <div>
-        <label htmlFor="last-name">Прізвище</label>
+        <label className={styles["form-label"]} htmlFor="last-name">Прізвище</label>
         <TextInput id="last-name" value={lastName} onChange={handleLastNameChange} />
       </div>
       <div>
-        <label htmlFor="password">Пароль</label>
+        <label className={styles["form-label"]} htmlFor="password">Пароль</label>
         <TextInput id="password" type="password" value={password} onChange={handlePasswordChange} />
       </div>
       <div>
-        <label htmlFor="password-repeat">Повторіть пароль</label>
+        <label className={styles["form-label"]} htmlFor="password-repeat">Повторіть пароль</label>
         <TextInput id="password-repeat" type="password" value={passwordRepeat} onChange={handlePasswordRepeatChange} />
       </div>
       <div>
         <Checkbox id="terms-and-conditions" checked={isAgreed} onChange={handleAgreedChange} />
         <label htmlFor="terms-and-conditions">Я підтверджую свою згоду з угодою користувача і погоджуюся з передачею та обробкою моїх персональних даних</label>
       </div>
-      <Button text="Зареєструватися" onClick={handleSubmit} disabled={!isAgreed} />
+      <Button text="Зареєструватися" onClick={handleSubmit} disabled={!isAgreed || isSubmitting} />
     </form>
   )
 }
