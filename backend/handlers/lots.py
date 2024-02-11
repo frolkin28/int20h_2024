@@ -77,6 +77,7 @@ def add_lot():
         return error_response(status_code=400, errors=e.messages)
 
     request_pictures = request.files.getlist("images")
+    print(request_pictures)
     lot_id = create_lot(request_data, request_pictures, user_id)
 
     return success_response(data={"lot_id": lot_id})
