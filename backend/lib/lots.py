@@ -3,6 +3,8 @@ from typing import Any
 from sqlalchemy.orm import joinedload
 from flask import current_app
 
+from werkzeug.datastructures import FileStorage
+
 
 import boto3
 from botocore.exceptions import ClientError
@@ -23,25 +25,28 @@ from datetime import date
 from backend.exc import UserPermissionError
 
 
-def upload_photo_to_s3(file_path: str, bucket_name: str, object_name: str) -> str:
+def upload_photo_to_s3(file: FileStorage, bucket_name: str, object_name: str) -> str:
+
 
     s3_client = boto3.client('s3')
 
     try:
-        response = s3_client.upload_file(file_path, bucket_name, object_name)
+        response = s3_client.upload_fileobj(file, bucket_name, object_name)
     except ClientError as e:
         current_app.logger.exception(e)
 
     return f"https://dq5d23gxa9vto.cloudfront.net/{object_name}"
 
 
-def create_picture(pictures: list[str], lot_id: int) -> None:
+def create_picture(pictures: list[FileStorage], lot_id: int) -> None:
+
     bucket_name = 'cha-cha-images' 
 
     object_prefix = str(lot_id)
 
     for img in pictures:
-        object_name = f"{object_prefix}/{img}" 
+        object_name = f"{object_prefix}/{img.filename}"
+        print("TEST: ", object_name)
         picture_url = upload_photo_to_s3(img, bucket_name, object_name)
         if picture_url:
             picture = Picture(
@@ -52,7 +57,7 @@ def create_picture(pictures: list[str], lot_id: int) -> None:
     db.session.commit()
 
 
-def create_lot(payload: LotPayload, pictures: t.List[str], user_id: int) -> int:
+def create_lot(payload: LotPayload, pictures: list[FileStorage], user_id: int) -> int:
     lot = Lot(
         lot_name=payload["lot_name"],
         description=payload["description"],
@@ -130,18 +135,19 @@ def get_lot_data(id: int) -> dict:
         picture_urls = []
 
     if lot:
-        lot_payload = {
-            "lot_name": lot.lot_name,
-            "description": lot.description,
-            "author": {
-                "email": author.email,
-                "first_name": author.first_name,
-                "last_name": author.last_name
-            },
-            "creation_date": lot.creation_date,
-            "end_date": lot.end_date,
-            "pictures": picture_urls
-        }
+        lot_payload: FullLotPayload = {
+                "lot_name": lot.lot_name,
+                "description": lot.description,
+                "author": {
+                    "email": author.email,
+                    "first_name": author.first_name,
+                    "last_name": author.last_name
+                },
+                "creation_date": lot.creation_date,
+                "end_date": lot.end_date,
+                "pictures": picture_urls
+            }
+    
         return lot_payload
     else:
         return None
