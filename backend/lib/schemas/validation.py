@@ -22,6 +22,18 @@ class LotSchema(Schema):
     end_date = fields.DateTime(required=True)
 
 
+class FullLotSchema(Schema):
+    lot_name = fields.Str(required=True)
+    description = fields.Str()
+    author = {
+        "email": fields.Str(required=True),
+        "first_name": fields.Str(required=True),
+        "last_name": fields.DateTime(required=True)
+    }
+    creation_date = fields.DateTime(required=True)
+    end_date = fields.DateTime(required=True)
+    pictures = fields.List(fields.Str())
+
 def lot_id_validator(value: int):
     try:
         schema_lot_validator(value)
