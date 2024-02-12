@@ -15,7 +15,7 @@ urls:
 ### Run Backend
 - `docker compose up backend`
 
-# Run Frontned
+### Run Frontned
 - `yarn --cwd ./frontend start`
 
 ### Migrations
