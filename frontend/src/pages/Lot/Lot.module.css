@@ -10,3 +10,7 @@
     flex-direction: column;
     row-gap: 30px;
 }
+
+.leftColumn {
+    width: 520px;
+}
