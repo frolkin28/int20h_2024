@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const ACCESS_TOKEN_KEY = "access_token";
+export const ACCESS_TOKEN_KEY = "access_token";
 
 export const useAuth = () => {
   const [token, setToken] = useState<string | null>(null);

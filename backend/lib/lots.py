@@ -173,18 +173,18 @@ def main_page_data(page: int, per_page: int) -> list:
     lots = Lot.query.paginate(page=page, per_page=per_page, error_out=False)
     for lot in lots.items:
         picture = Picture.query.filter(Picture.lot_id == lot.id).first()
-        biggest_bet = Bet.query.filter(Bet.lot_id == lot.id).order_by(desc(Bet.amount)).first()
-        price = float(biggest_bet.amount) if biggest_bet else float(lot.start_price)
-        
+        biggest_bet = (
+            Bet.query.filter(Bet.lot_id == lot.id).order_by(desc(Bet.amount)).first()
+        )
+        price_lot = biggest_bet.amount if biggest_bet else lot.start_price
         picture_url = picture.url if picture else None
-        price_lot = price / 100 if price else None
 
         load_data: ListLotPayload = {
             "lot_name": lot.lot_name,
             "lot_id": lot.id,
             "end_date": lot.end_date,
             "picture": picture_url,
-            "price": price_lot,
+            "price": prepare_amount(price_lot) if price_lot else 0,
         }
         data.append(load_data)
     return data

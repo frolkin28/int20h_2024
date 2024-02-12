@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask_jwt_extended import JWTManager, decode_token, current_user
+from flask_jwt_extended import JWTManager, decode_token, get_current_user, get_jwt
 from jwt import ExpiredSignatureError
 from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -20,9 +20,10 @@ jwt = JWTManager()
 
 def get_user_id_or_none() -> int | None:
     try:
-        user_id = current_user.id
-    except RuntimeError:
+        user_id = get_current_user().id
+    except (RuntimeError, AttributeError):
         user_id = None
+
     return user_id
 
 
