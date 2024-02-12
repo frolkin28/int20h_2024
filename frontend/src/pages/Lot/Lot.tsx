@@ -30,7 +30,7 @@ export const LotPage = () => {
 
   return (
     <div className={styles.container}>
-      <div className={sharedStyles.card}>
+      <div className={`${sharedStyles.card} ${styles.leftColumn}`}>
         <h1>{lot.lot_name}</h1>
         <p>{lot.description}</p>
         <p>

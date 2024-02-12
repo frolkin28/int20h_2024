@@ -2,3 +2,7 @@
     height: 200px;
     overflow-y: auto;
 }
+
+.messageWrapper {
+    width: 430px;
+}

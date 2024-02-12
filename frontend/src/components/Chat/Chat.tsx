@@ -44,7 +44,7 @@ export const Chat = ({ lotId }: { lotId: number }) => {
       <h3 className={sharedStyles.withoutMargin}>Чат аукціону</h3>
       <div className={styles.chatWrapper} ref={chatContainerRef}>
         {messages.map((message) => (
-          <div key={message.id}>
+          <div key={message.id} className={styles.messageWrapper}>
             <div>
               <strong>
                 {message.author.first_name} {message.author.last_name}:
