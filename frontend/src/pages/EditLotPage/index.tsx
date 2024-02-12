@@ -1,9 +1,9 @@
 import axios from "axios";
-import { ChangeEvent, FormEvent, useContext, useEffect, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styles from "./EditLotPage.module.css";
-import { DateTimeInput, TextArea, TextInput } from "../../components";
-import { AuthContext } from "../../AuthContext";
+import { TextArea, TextInput } from "../../components";
+import { ACCESS_TOKEN_KEY } from "../../hooks";
 
 export const EditLotPage = () => {
   const { lotId } = useParams<{ lotId: string }>();
@@ -15,7 +15,7 @@ export const EditLotPage = () => {
 
   const [loading, setLoading] = useState(true);
   const [isAuthor, setisAuthor] = useState(true);
-  const { token } = useContext(AuthContext);
+  const token = localStorage.getItem(ACCESS_TOKEN_KEY);
 
   const prepareDate = (value: string) => {
     return new Date(value).toISOString().slice(0, 16);
@@ -27,9 +27,19 @@ export const EditLotPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const headers = {
+        "Content-Type": "application/json",
+      } as { [key: string]: string };
+      if (token) headers.Authorization = `Bearer ${token}`;
+
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/api/lots/${lotId}`
+          `${process.env.REACT_APP_BASE_URL}/api/lots/${lotId}`,
+          {
+            headers: {
+              ...headers,
+            },
+          }
         );
         setName(res.data.data.lot_data.lot_name);
         setDescription(res.data.data.lot_data.description);
@@ -43,10 +53,12 @@ export const EditLotPage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
-    navigate(`/lots/${lotId}`);
+    if (!isAuthor) {
+      navigate(`/lots/${lotId}`);
+    }
   }, [isAuthor]);
 
   if (loading) {

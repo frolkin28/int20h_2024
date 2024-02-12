@@ -6,7 +6,12 @@ from flask import Blueprint, request
 from marshmallow import ValidationError
 from flask_jwt_extended import jwt_required, current_user
 
-from backend.lib.schemas import LotSchema, LotCreationSchema, FullLotSchema, ListLotSchema
+from backend.lib.schemas import (
+    LotSchema,
+    LotCreationSchema,
+    FullLotSchema,
+    ListLotSchema,
+)
 from backend.types import LotCreationLoad, LotPayload
 
 from backend.lib.lots import create_lot, update_lot_data, get_lot_data, main_page_data
@@ -43,7 +48,7 @@ def add_lot():
                                 type: string
                                 description: (iso, rfc, timestamp format)
                             start_price:
-                                type: float 
+                                type: float
                             images:
                                 type: array
                                 items:
@@ -145,6 +150,7 @@ def update_lot(id):
 
 
 @bp.route("/<int:id>", methods=("GET",))
+@jwt_required(optional=True)
 def lot_data(id):
     """
     ---
@@ -169,9 +175,10 @@ def lot_data(id):
         tags:
         - lots
     """
+    user_id = get_user_id_or_none()
 
     try:
-        lot_data = get_lot_data(id, get_user_id_or_none())
+        lot_data = get_lot_data(id, user_id)
     except (InvalidDateError, LotDoesNotExist) as e:
         return error_response(
             status_code=400,
@@ -204,7 +211,7 @@ def main_page():
     """
 
     try:
-        page = request.args.get('page', 1, type=int)
+        page = request.args.get("page", 1, type=int)
         per_page = 13
         lot_list = main_page_data(page, per_page)
         has_more_items = True if len(lot_list) == per_page else False
@@ -213,4 +220,6 @@ def main_page():
             status_code=400,
             errors={"message": e.message},
         )
-    return success_response(data={"lot_data": lot_list[:per_page-1], "has_more_items": has_more_items})
+    return success_response(
+        data={"lot_data": lot_list[: per_page - 1], "has_more_items": has_more_items}
+    )
