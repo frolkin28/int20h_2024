@@ -131,6 +131,7 @@ def get_lot_data(lot_id: int, request_user_id: int | None) -> dict:
             Lot.description,
             Lot.creation_date,
             Lot.end_date,
+            Lot.start_price,
             User.id.label("user_id"),
             User.email.label("user_email"),
             User.first_name.label("user_first_name"),
